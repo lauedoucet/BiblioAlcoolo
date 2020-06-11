@@ -2,11 +2,11 @@ public class DistilledAlcohol implements Alcohol {
     /******************Attributes*************************/
 
     /******************Methods***************************/
-    public void setRating() {
+    public void setRating(double pRating) {
 
     }
 
-    public void addTag() {
+    public void addTag(Tag pTag) {
 
     }
 
