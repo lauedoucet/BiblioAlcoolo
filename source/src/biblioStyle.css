@@ -1,0 +1,9 @@
+/*
+    Document    :   bilbioStyle
+*/
+
+.root{
+    -fx-font-size:          16pt;
+    -fx-font-family:        Console, Monospace;
+    -fx-background-color:   #85C1E9;
+}
