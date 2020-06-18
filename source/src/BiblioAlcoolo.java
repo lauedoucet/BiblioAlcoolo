@@ -2,20 +2,22 @@
  *
  *   Copyright (C) 2020 Laurence Doucet
  *   Application that allows the management and record of alcohol
- *   Application class for the library of alcohol
+ *   Application class for the library of alcohol using JavaFX
  *
  */
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.geometry.Insets;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
+import java.util.ArrayList;
 
 public class BiblioAlcoolo extends Application {
 
@@ -26,8 +28,12 @@ public class BiblioAlcoolo extends Application {
     private static final String VERSION = "1.0";
     private static final String STYLE_SHEET = "./biblioStyle.css";
 
+    private StackPane stack;
     private GridPane root;
+    private Stage window;
+    private Scene scene1, scene2;
 
+    private ArrayList<Alcohol> boozes = new ArrayList<Alcohol>();
 
     public static void main(String[] args) {
         launch(args);
@@ -35,54 +41,69 @@ public class BiblioAlcoolo extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle(TITLE + " " + VERSION);
+        window = primaryStage;
+        window.setTitle(TITLE + " " + VERSION);
 
-        root = new GridPane();
-        root.setHgap(MARGIN_OUTER);
-        root.setVgap(MARGIN_OUTER);
-        root.setPadding(new Insets(MARGIN_OUTER));
+        /************Setting up first page***********/
+        Label welcomeLabel = new Label("Welcome to BiblioAlcoolo!");
+        StackPane.setAlignment(welcomeLabel, Pos.TOP_CENTER);
 
-        /***********Setting up closing button**********/
-        Button closeButton = new Button("close");
-        closeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                if (actionEvent.getSource() == closeButton) {
-                    primaryStage.close();
-                }
-            }
-        });
-        GridPane.setConstraints(closeButton, 0,5);
-        root.getChildren().add(closeButton);
+        Button moveButton = new Button("Log new alcohol");
+        StackPane.setAlignment(moveButton, Pos.CENTER);
+        moveButton.setOnAction(e -> window.setScene(scene2));
 
-        /******Setting up labels*************/
+        Button closeButton = new Button("Bye bye");
+        closeButton.setOnAction(e -> window.close());
+        StackPane.setAlignment(closeButton, Pos.BOTTOM_RIGHT);
+
+        stack = new StackPane();
+        stack.getChildren().addAll(welcomeLabel, moveButton, closeButton);
+        scene1 = new Scene(stack, WIDTH, HEIGHT);
+        scene1.getStylesheets().add(STYLE_SHEET);
+
+        /************Setting up second page*****************/
         Text nameLabel = new Text("Name: ");
         GridPane.setConstraints(nameLabel, 0,0);
         Text sizeLabel = new Text("Size: ");
         GridPane.setConstraints(sizeLabel, 0,1);
         Text abvLabel = new Text("ABV: ");
         GridPane.setConstraints(abvLabel, 0,2);
-        root.getChildren().addAll(nameLabel, sizeLabel, abvLabel);
 
-        /**********Setting up fields**********/
         TextField nameField = new TextField();
         GridPane.setConstraints(nameField, 1,0);
-        nameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                // if press enter then record the name
-            }
-        });
         TextField sizeField = new TextField();
         GridPane.setConstraints(sizeField, 1,1);
         TextField abvField = new TextField();
         GridPane.setConstraints(abvField, 1,2);
-        root.getChildren().addAll(nameField, sizeField, abvField);
 
-        Scene scene = new Scene(root, WIDTH, HEIGHT);
-        scene.getStylesheets().add(STYLE_SHEET);
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.show();
+
+        Button addAlcohol = new Button("Add to collection");
+        addAlcohol.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String name = nameField.getText();
+                /********TODO: throw exception if not int or double*************/
+                int size = Integer.parseInt(sizeField.getText());
+                double abv = Double.parseDouble(abvField.getText());
+                Alcohol newAlc = new Alcohol(name, size, abv);
+                boozes.add(newAlc);
+                for (Alcohol alcohol : boozes) {
+                    alcohol.displayInfo();
+                }
+            }
+        });
+        GridPane.setConstraints(addAlcohol, 0, 3);
+
+        root = new GridPane();
+        root.setHgap(MARGIN_OUTER);
+        root.setVgap(MARGIN_OUTER);
+        root.setPadding(new Insets(MARGIN_OUTER));
+        root.getChildren().addAll(nameLabel, sizeLabel, abvLabel, nameField, sizeField, abvField, addAlcohol);
+        scene2 = new Scene(root, WIDTH, HEIGHT);
+        scene2.getStylesheets().add(STYLE_SHEET);
+
+        window.setScene(scene1);
+        window.setResizable(false);
+        window.show();
     }
 }

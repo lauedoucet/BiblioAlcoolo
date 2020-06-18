@@ -1,10 +1,10 @@
 /*
-*
-*   Copyright (C) 2020 Laurence Doucet
-*   App that allows the management and record of alcohol
-*   Class represents an alcohol bottle
-*
-*/
+ *
+ *   Copyright (C) 2020 Laurence Doucet
+ *   App that allows the management and record of alcohol
+ *   Class represents an alcohol bottle
+ *
+ */
 
 import java.util.ArrayList;
 
@@ -19,6 +19,10 @@ public class Alcohol {
         aSize = pSize;
         aABV = pABV;
         tags = new ArrayList<Tag>();
+    }
+
+    public String getName() {
+        return aName;
     }
 
     public void setABV(double pABV) {
