@@ -34,6 +34,7 @@ public class BiblioAlcoolo extends Application {
     private Scene scene1, scene2;
 
     private ArrayList<Alcohol> boozes = new ArrayList<Alcohol>();
+    private Library library = new Library();
 
     public static void main(String[] args) {
         launch(args);
@@ -82,13 +83,16 @@ public class BiblioAlcoolo extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String name = nameField.getText();
-                /********TODO: throw exception if not int or double*************/
-                int size = Integer.parseInt(sizeField.getText());
-                double abv = Double.parseDouble(abvField.getText());
-                Alcohol newAlc = new Alcohol(name, size, abv);
-                boozes.add(newAlc);
-                for (Alcohol alcohol : boozes) {
-                    alcohol.displayInfo();
+                try {
+                    int size = Integer.parseInt(sizeField.getText());
+                    double abv = Double.parseDouble(abvField.getText());
+                    Alcohol newAlcohol = new Alcohol(name, size, abv);
+                    library.addBottle(newAlcohol);
+                } catch (NumberFormatException e) {
+                    /********TODO: display error message*************/
+                    // tells user it needs to be a whole number for size and double for abv
+                    // clicking 'ok' clears the field and exits that window
+                    AlertBox.display("Invalid Input", "Please enter numbers for size and ABV");
                 }
             }
         });
