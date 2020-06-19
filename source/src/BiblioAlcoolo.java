@@ -7,6 +7,7 @@
  */
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -23,7 +24,7 @@ public class BiblioAlcoolo extends Application {
     private static final String STYLE_SHEET = "./biblioStyle.css";
 
     private Stage window;
-    private Scene welcomePage, librariesPage;
+    private Scene welcomePage, librariesPage, libraryHomePage;
 
     private Library library = new Library();
     private User user = new User();
@@ -40,7 +41,7 @@ public class BiblioAlcoolo extends Application {
         /*************************welcomePage**********************/
         Button welcomeButton = new Button(TITLE);
         StackPane.setAlignment(welcomeButton, Pos.CENTER);
-        welcomeButton.setOnAction(e -> window.setScene(librariesPage));
+        welcomeButton.setOnAction(e -> window.setScene(libraryHomePage));
 
         Button closeButton = new Button("close");
         closeButton.setOnAction(e -> closeProgram());
@@ -56,8 +57,14 @@ public class BiblioAlcoolo extends Application {
         welcomePage.getStylesheets().add(STYLE_SHEET);
 
         /*************************libraryPage**********************/
+        Label libraryLabel = new Label("Your library: ");
+        GridPane.setConstraints(libraryLabel, 0,0);
+
+        GridPane alcoholGrid = displayLibrary();
+        GridPane.setConstraints(alcoholGrid, 0, 1);
+
         Button addNewAlcohol = new Button("Add new alcohol");
-        GridPane.setConstraints(addNewAlcohol, 0, 0);
+        GridPane.setConstraints(addNewAlcohol, 1, 0);
         GridPane.setFillWidth(addNewAlcohol, true);
         addNewAlcohol.setOnAction(e -> {
             Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
@@ -70,15 +77,30 @@ public class BiblioAlcoolo extends Application {
         GridPane.setConstraints(goBack, 1,1);
         goBack.setOnAction(e -> window.setScene(welcomePage));
 
-        /*************addNewAlcoholPopUp**************************/
         GridPane gridPane1 = new GridPane();
-        gridPane1.getChildren().addAll(addNewAlcohol, goBack);
-        librariesPage = new Scene(gridPane1, WIDTH, HEIGHT);
-        librariesPage.getStylesheets().add(STYLE_SHEET);
+        gridPane1.setPadding(new Insets(10,10,10,10));
+        gridPane1.setVgap(8);
+        gridPane1.setHgap(8);
+        gridPane1.getChildren().addAll(libraryLabel, alcoholGrid, addNewAlcohol, goBack);
+
+        libraryHomePage = new Scene(gridPane1, WIDTH, HEIGHT);
+        libraryHomePage.getStylesheets().add(STYLE_SHEET);
 
         window.setScene(welcomePage);
         window.setResizable(false);
         window.show();
+    }
+
+    private GridPane displayLibrary() {
+        GridPane grid = new GridPane();
+        int i = 0;
+        for (Alcohol alcohol : library) {
+            Label label = new Label(alcohol.getName());
+            GridPane.setConstraints(label, 0, i);
+            grid.getChildren().add(label);
+            i++;
+        }
+        return grid;
     }
 
     private void closeProgram() {

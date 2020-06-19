@@ -8,8 +8,9 @@
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class Library {
+public class Library implements Iterable<Alcohol>{
     /************TODO: Implement as Flyweight***************/
     // HashMap of bottles with names as keys
     private String aName;
@@ -45,5 +46,11 @@ public class Library {
     public void displayCollection() {
         System.out.println("Your library contains the following bottles:");
         bottlesByName.forEach((k,v) -> v.displayInfo());
+    }
+
+
+    @Override
+    public Iterator<Alcohol> iterator() {
+        return bottlesByName.values().iterator();
     }
 }

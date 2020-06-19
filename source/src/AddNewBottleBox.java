@@ -8,6 +8,7 @@
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -19,7 +20,7 @@ import javafx.stage.Stage;
 public class AddNewBottleBox {
 
     private static final int WIDTH = 450;
-    private static final int HEIGHT = 400;
+    private static final int HEIGHT = 250;
     private static final String STYLE_SHEET = "./biblioStyle.css";
     private static Alcohol alcohol;
 
@@ -41,14 +42,18 @@ public class AddNewBottleBox {
         GridPane.setConstraints(abvLabel, 0,2);
 
         TextField nameField = new TextField();
+        nameField.setPromptText("Name of Alcohol");
         GridPane.setConstraints(nameField, 1,0);
         TextField sizeField = new TextField();
+        sizeField.setPromptText("Size of bottle in ml");
         GridPane.setConstraints(sizeField, 1,1);
         TextField abvField = new TextField();
+        abvField.setPromptText("Alcohol by volume %");
         GridPane.setConstraints(abvField, 1,2);
 
-        Button addAlcohol = new Button("Add to library");
-        GridPane.setConstraints(addAlcohol, 0, 3);
+        Button addAlcohol = new Button("Add");
+        GridPane.setConstraints(addAlcohol, 1, 3);
+        GridPane.setFillWidth(addAlcohol, true);
         addAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -67,12 +72,16 @@ public class AddNewBottleBox {
         });
 
         GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10,10,10,10));
+        gridPane.setVgap(8);
+        gridPane.setHgap(8);
         gridPane.getChildren().addAll(nameLabel, sizeLabel, abvLabel, nameField, sizeField, abvField, addAlcohol);
 
         Scene scene = new Scene(gridPane, WIDTH, HEIGHT);
         scene.getStylesheets().add(STYLE_SHEET);
         window.setScene(scene);
         window.showAndWait();
+        // display/updateLibrary
 
         return alcohol;
     }
