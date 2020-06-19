@@ -9,6 +9,7 @@
 import java.util.ArrayList;
 
 public class Alcohol {
+
     private String aName;
     private int aSize;
     private double aABV;

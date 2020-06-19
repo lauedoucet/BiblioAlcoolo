@@ -43,6 +43,7 @@ public class Library {
     }
 
     public void displayCollection() {
+        System.out.println("Your library contains the following bottles:");
         bottlesByName.forEach((k,v) -> v.displayInfo());
     }
 }
