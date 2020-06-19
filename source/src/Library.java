@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Library {
+    /************TODO: Implement as Flyweight***************/
     // HashMap of bottles with names as keys
+    private String aName;
     private HashMap<String, Alcohol> bottlesByName;
 
     public Library() {
@@ -23,7 +25,11 @@ public class Library {
         }
     }
 
-    public Alcohol getByName(String pName) {
+    public String getLibraryName() {
+        return aName;
+    }
+
+    public Alcohol getAlcoholByName(String pName) {
         return bottlesByName.get(pName);
     }
 

@@ -17,24 +17,21 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
-import java.util.ArrayList;
 
 public class BiblioAlcoolo extends Application {
 
     private static final int WIDTH = 680;
     private static final int HEIGHT = 500;
     private static final int MARGIN_OUTER = 10;
-    private static final String TITLE = "BiblioAlcolo";
+    private static final String TITLE = "BiblioAlcoolo";
     private static final String VERSION = "1.0";
     private static final String STYLE_SHEET = "./biblioStyle.css";
 
-    private StackPane stack;
-    private GridPane root;
     private Stage window;
-    private Scene scene1, scene2;
+    private Scene welcomePage, librariesPage, libraryHomePage;
 
-    private ArrayList<Alcohol> boozes = new ArrayList<Alcohol>();
     private Library library = new Library();
+    private User user = new User();
 
     public static void main(String[] args) {
         launch(args);
@@ -45,24 +42,36 @@ public class BiblioAlcoolo extends Application {
         window = primaryStage;
         window.setTitle(TITLE + " " + VERSION);
 
-        /************Setting up first page***********/
-        Label welcomeLabel = new Label("Welcome to BiblioAlcoolo!");
-        StackPane.setAlignment(welcomeLabel, Pos.TOP_CENTER);
+        /*************************welcomePage**********************/
+        Button welcomeButton = new Button(TITLE);
+        StackPane.setAlignment(welcomeButton, Pos.CENTER);
+        welcomeButton.setOnAction(e -> window.setScene(librariesPage));
 
-        Button moveButton = new Button("Log new alcohol");
-        StackPane.setAlignment(moveButton, Pos.CENTER);
-        moveButton.setOnAction(e -> window.setScene(scene2));
-
-        Button closeButton = new Button("Bye bye");
+        Button closeButton = new Button("close");
         closeButton.setOnAction(e -> window.close());
         StackPane.setAlignment(closeButton, Pos.BOTTOM_RIGHT);
 
-        stack = new StackPane();
-        stack.getChildren().addAll(welcomeLabel, moveButton, closeButton);
-        scene1 = new Scene(stack, WIDTH, HEIGHT);
-        scene1.getStylesheets().add(STYLE_SHEET);
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(welcomeButton, closeButton);
+        welcomePage = new Scene(stackPane, WIDTH, HEIGHT);
+        welcomePage.getStylesheets().add(STYLE_SHEET);
 
-        /************Setting up second page*****************/
+        /*************************librariesPage**********************/
+        Button addNewAlcohol = new Button("Add new alcohol");
+        GridPane.setConstraints(addNewAlcohol, 0, 0);
+        GridPane.setFillWidth(addNewAlcohol, true);
+        addNewAlcohol.setOnAction(e -> window.setScene(libraryHomePage));
+
+        Button goBack = new Button("back");
+        GridPane.setConstraints(goBack, 1,1);
+        goBack.setOnAction(e -> window.setScene(welcomePage));
+
+        GridPane gridPane1 = new GridPane();
+        gridPane1.getChildren().addAll(addNewAlcohol, goBack);
+        librariesPage = new Scene(gridPane1, WIDTH, HEIGHT);
+        librariesPage.getStylesheets().add(STYLE_SHEET);
+
+        /*************************libraryHomePage**********************/
         Text nameLabel = new Text("Name: ");
         GridPane.setConstraints(nameLabel, 0,0);
         Text sizeLabel = new Text("Size: ");
@@ -77,8 +86,8 @@ public class BiblioAlcoolo extends Application {
         TextField abvField = new TextField();
         GridPane.setConstraints(abvField, 1,2);
 
-
-        Button addAlcohol = new Button("Add to collection");
+        Button addAlcohol = new Button("Add to library");
+        GridPane.setConstraints(addAlcohol, 0, 3);
         addAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -88,6 +97,7 @@ public class BiblioAlcoolo extends Application {
                     double abv = Double.parseDouble(abvField.getText());
                     Alcohol newAlcohol = new Alcohol(name, size, abv);
                     library.addBottle(newAlcohol);
+                    newAlcohol.displayInfo();
                 } catch (NumberFormatException e) {
                     /********TODO: display error message*************/
                     // tells user it needs to be a whole number for size and double for abv
@@ -96,17 +106,16 @@ public class BiblioAlcoolo extends Application {
                 }
             }
         });
-        GridPane.setConstraints(addAlcohol, 0, 3);
 
-        root = new GridPane();
-        root.setHgap(MARGIN_OUTER);
-        root.setVgap(MARGIN_OUTER);
-        root.setPadding(new Insets(MARGIN_OUTER));
-        root.getChildren().addAll(nameLabel, sizeLabel, abvLabel, nameField, sizeField, abvField, addAlcohol);
-        scene2 = new Scene(root, WIDTH, HEIGHT);
-        scene2.getStylesheets().add(STYLE_SHEET);
+        GridPane gridPane2 = new GridPane();
+        gridPane2.setHgap(MARGIN_OUTER);
+        gridPane2.setVgap(MARGIN_OUTER);
+        gridPane2.setPadding(new Insets(MARGIN_OUTER));
+        gridPane2.getChildren().addAll(nameLabel, sizeLabel, abvLabel, nameField, sizeField, abvField, addAlcohol);
+        libraryHomePage = new Scene(gridPane2, WIDTH, HEIGHT);
+        libraryHomePage.getStylesheets().add(STYLE_SHEET);
 
-        window.setScene(scene1);
+        window.setScene(welcomePage);
         window.setResizable(false);
         window.show();
     }
