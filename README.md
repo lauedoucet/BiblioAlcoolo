@@ -1,2 +1,2 @@
 # BiblioAlcoolo
-Alcohol management system. Record and rate your favourite drinks and recipes.
+main.Alcohol management system. Record and rate your favourite drinks and recipes.

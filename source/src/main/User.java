@@ -2,10 +2,10 @@
  *
  *   Copyright (C) 2020 Laurence Doucet
  *   App that allows the management and record of alcohol
- *   Class represents a User that can hold multiple libraries and ID
+ *   Class represents a main.User that can hold multiple libraries and ID
  *
  */
-
+package main;
 import java.util.HashMap;
 
 public class User {
@@ -25,7 +25,7 @@ public class User {
     }
 
     public void addLibrary(Library library) {
-        aLibraries.put(library.getLibraryName(), library);
+        aLibraries.put(library.getName(), library);
     }
 
     public Library getLibrary(String name) {

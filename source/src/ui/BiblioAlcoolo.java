@@ -5,7 +5,7 @@
  *   Application class for the library of alcohol using JavaFX
  *
  */
-
+package ui;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,6 +14,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
+import main.Alcohol;
+import main.Library;
+import main.User;
 
 public class BiblioAlcoolo extends Application {
 
@@ -21,7 +24,7 @@ public class BiblioAlcoolo extends Application {
     private static final int HEIGHT = 500;
     private static final String TITLE = "BiblioAlcoolo";
     private static final String VERSION = "1.0";
-    private static final String STYLE_SHEET = "./biblioStyle.css";
+    private static final String STYLE_SHEET = "ui/biblioStyle.css";
 
     private Stage window;
     private Scene welcomePage, librariesPage, libraryHomePage;
@@ -68,7 +71,9 @@ public class BiblioAlcoolo extends Application {
         GridPane.setFillWidth(addNewAlcohol, true);
         addNewAlcohol.setOnAction(e -> {
             Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
-            library.addBottle(alcohol);
+            if (!library.addAlcohol(alcohol)) {
+                library.addAlcohol(alcohol.getName(), alcohol.getSize(), alcohol.getABV());
+            }
             /**TODO: remove later**/
             library.displayCollection();
         });

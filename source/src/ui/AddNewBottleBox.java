@@ -6,6 +6,7 @@
  *
  */
 
+package ui;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -16,12 +17,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import main.Alcohol;
 
 public class AddNewBottleBox {
 
     private static final int WIDTH = 450;
     private static final int HEIGHT = 250;
-    private static final String STYLE_SHEET = "./biblioStyle.css";
+    private static final String STYLE_SHEET = "ui/biblioStyle.css";
     private static Alcohol alcohol;
 
     /**
@@ -42,13 +44,13 @@ public class AddNewBottleBox {
         GridPane.setConstraints(abvLabel, 0,2);
 
         TextField nameField = new TextField();
-        nameField.setPromptText("Name of Alcohol");
+        nameField.setPromptText("Name of main.Alcohol");
         GridPane.setConstraints(nameField, 1,0);
         TextField sizeField = new TextField();
         sizeField.setPromptText("Size of bottle in ml");
         GridPane.setConstraints(sizeField, 1,1);
         TextField abvField = new TextField();
-        abvField.setPromptText("Alcohol by volume %");
+        abvField.setPromptText("main.Alcohol by volume %");
         GridPane.setConstraints(abvField, 1,2);
 
         Button addAlcohol = new Button("Add");

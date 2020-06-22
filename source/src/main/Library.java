@@ -6,13 +6,12 @@
  *
  */
 
+package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class Library implements Iterable<Alcohol>{
-    /************TODO: Implement as Flyweight***************/
-    // HashMap of bottles with names as keys
+public class Library implements Iterable<Alcohol> {
     private String aName;
     private HashMap<String, Alcohol> bottlesByName;
 
@@ -26,16 +25,30 @@ public class Library implements Iterable<Alcohol>{
         }
     }
 
-    public String getLibraryName() {
+    public String getName() {
         return aName;
     }
 
-    public Alcohol getAlcoholByName(String pName) {
-        return bottlesByName.get(pName);
+    /**
+     * Overloaded methods
+     * Implements Flyweight DP for the library class
+     * @return the alcohol object with the parameters, or creates a new one with those parameters
+     */
+    public Alcohol addAlcohol(String pName, int pSize, double pABV) {
+        Alcohol alcohol = bottlesByName.get(pName);
+        if (alcohol == null) {
+            alcohol = new Alcohol(pName, pSize, pABV);
+            bottlesByName.put(pName, alcohol);
+        }
+        return alcohol;
     }
 
-    public boolean addBottle(Alcohol alcohol) {
-        // if this returns a value that already has the same name, it returns false
+    /**
+     * Adds alcohol object if not already present in the Library
+     * @param alcohol to be added to library
+     * @return returns true if the alcohol was added, returns false if bottle already present
+     */
+    public boolean addAlcohol(Alcohol alcohol) {
         if (bottlesByName.putIfAbsent(alcohol.getName(), alcohol) == null) {
             return true;
         } else {
@@ -47,7 +60,6 @@ public class Library implements Iterable<Alcohol>{
         System.out.println("Your library contains the following bottles:");
         bottlesByName.forEach((k,v) -> v.displayInfo());
     }
-
 
     @Override
     public Iterator<Alcohol> iterator() {

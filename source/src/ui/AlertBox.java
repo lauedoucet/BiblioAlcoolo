@@ -1,4 +1,4 @@
-/*
+package ui;/*
  *
  *   Copyright (C) 2020 Laurence Doucet
  *   App that allows the management and record of alcohol

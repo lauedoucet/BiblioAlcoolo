@@ -6,6 +6,8 @@
  *
  */
 
+package main;
+
 import java.util.ArrayList;
 
 public class Alcohol {
@@ -25,6 +27,10 @@ public class Alcohol {
     public String getName() {
         return aName;
     }
+
+    public int getSize() {  return aSize;   }
+
+    public double getABV() { return aABV; }
 
     public void setABV(double pABV) {
         aABV = pABV;
