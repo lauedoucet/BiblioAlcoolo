@@ -34,10 +34,10 @@ public class Library implements Iterable<Alcohol> {
      * Implements Flyweight DP for the library class
      * @return the alcohol object with the parameters, or creates a new one with those parameters
      */
-    public Alcohol addAlcohol(String pName, int pSize, double pABV) {
+    public Alcohol addAlcohol(String pName, double pABV, String pCountry) {
         Alcohol alcohol = bottlesByName.get(pName);
         if (alcohol == null) {
-            alcohol = new Alcohol(pName, pSize, pABV);
+            alcohol = new Alcohol(pName, pABV, pCountry);
             bottlesByName.put(pName, alcohol);
         }
         return alcohol;

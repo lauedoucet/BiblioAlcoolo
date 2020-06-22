@@ -63,8 +63,8 @@ public class AddNewBottleBox {
                 try {
                     int size = Integer.parseInt(sizeField.getText());
                     double abv = Double.parseDouble(abvField.getText());
-                     alcohol = new Alcohol(name, size, abv);
-                     /**TODO: remove later**/
+                     alcohol = new Alcohol(name, abv, "country");
+                     /**TODO: update**/
                      System.out.println("new alcohol logged");
                      window.close();
                 } catch (NumberFormatException e) {

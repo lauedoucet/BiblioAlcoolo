@@ -2,56 +2,71 @@
  *
  *   Copyright (C) 2020 Laurence Doucet
  *   App that allows the management and record of alcohol
- *   Class represents an alcohol bottle
+ *   abstract Class represents an alcohol bottle
  *
  */
 
 package main;
 
-import java.util.ArrayList;
-
 public class Alcohol {
-
     private String aName;
-    private int aSize;
+    private int aRating;
     private double aABV;
-    private ArrayList<Tag> tags;
+    private String aCountry;
 
-    public Alcohol(String pName, int pSize, double pABV) {
+    public Alcohol(String pName, double pABV, String pCountry) {
         aName = pName;
-        aSize = pSize;
+        aRating = 0;
         aABV = pABV;
-        tags = new ArrayList<Tag>();
+        aCountry = pCountry;
     }
 
     public String getName() {
         return aName;
     }
 
-    public int getSize() {  return aSize;   }
+    /**
+     * @return 0 if the alcohol is not rated yet
+     */
+    public int getRating() {
+        return aRating;
+    }
 
     public double getABV() { return aABV; }
 
+    public String getCountry() {
+        return aCountry;
+    }
+
+    /**
+     * Rating is 1-5 inclusive, 0 represents no rating
+     * @param pRating > 0 && pRating < 6
+     */
+    public void setRating (int pRating) {
+        assert pRating > 0 && pRating < 6;
+        aRating = pRating;
+    }
+
+    /**
+     * @param pABV > 0
+     */
     public void setABV(double pABV) {
+        assert pABV > 0;
         aABV = pABV;
     }
 
-    public void addTag(Tag pTag) {
-        tags.add(pTag);
-    }
-
-    public void displayTags() {
-        for (Tag tag : tags) {
-            System.out.print("#" + tag.name() + " ");
-        }
-        System.out.println(" ");
+    public void setCountry(String pCountry) {
+        aCountry = pCountry;
     }
 
     public void displayInfo() {
-        System.out.println("Name:   " + aName);
-        System.out.println("Size:   " + aSize + " ml");
-        System.out.println("ABV:   " + aABV + "%");
-        displayTags();
-
+        System.out.println("Name:       " + aName);
+        System.out.println("ABV:        " + aABV + "%");
+        System.out.println("Country:    " + aCountry);
+        if (aRating > 0) {
+            System.out.println("Rating:     " + aRating + "/5");
+        } else {
+            System.out.println("No rating yet.");
+        }
     }
 }

@@ -15,7 +15,7 @@ public enum Countries {
         aLanguage = pLanguage;
         for (String countryCode : Locale.getISOCountries()) {
             Locale obj = new Locale("", countryCode);
-            aCountries.add(obj.getDisplayCountry());
+            aCountries.add(obj.getDisplayCountry(locale));
         }
     }
 

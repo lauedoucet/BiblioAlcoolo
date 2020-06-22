@@ -72,7 +72,7 @@ public class BiblioAlcoolo extends Application {
         addNewAlcohol.setOnAction(e -> {
             Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
             if (!library.addAlcohol(alcohol)) {
-                library.addAlcohol(alcohol.getName(), alcohol.getSize(), alcohol.getABV());
+                library.addAlcohol(alcohol.getName(), alcohol.getABV(), alcohol.getCountry());
             }
             /**TODO: remove later**/
             library.displayCollection();
