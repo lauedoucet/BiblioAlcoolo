@@ -10,15 +10,12 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import main.*;
 
-import java.util.Stack;
 
 public class BiblioAlcoolo extends Application {
 
@@ -31,7 +28,6 @@ public class BiblioAlcoolo extends Application {
     private Stage window;
     private Scene welcomePage, librariesPage, libraryHomePage;
 
-    private Library library = new Library("Library 1");
     private User user = new User();
 
     public static void main(String[] args) {
@@ -40,13 +36,18 @@ public class BiblioAlcoolo extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        /** TEST START **/
+        user.addLibrary(new Library("Collection 1"));
+        Wine redWine = new Wine("19 Crimes", 14.5, "Australia");
+        Wine whiteWine = new Wine("Albert Bichot", 11.8, "France");
+        Beer beer = new Beer("Amacord Gradisca", 5.2, "Italy");
+        user.getLibrary("Collection 1").addAll(redWine, whiteWine, beer);
+        /** TEST END **/
+
         window = primaryStage;
         window.setTitle(TITLE + " " + VERSION);
 
         welcomePage = generateWelcomePage();
-
-        libraryHomePage = generateLibraryHomePage();
-        libraryHomePage.getStylesheets().add(STYLE_SHEET);
 
         window.setScene(welcomePage);
         window.setResizable(false);
@@ -64,7 +65,12 @@ public class BiblioAlcoolo extends Application {
     private Scene generateWelcomePage() {
         Button welcomeButton = new Button(TITLE);
         StackPane.setAlignment(welcomeButton, Pos.CENTER);
-        welcomeButton.setOnAction(e -> window.setScene(libraryHomePage));
+        welcomeButton.setOnAction(e ->
+        {
+            librariesPage = generateLibrariesPage();
+            librariesPage.getStylesheets().add(STYLE_SHEET);
+            window.setScene(librariesPage);
+        });
 
         Button closeButton = new Button("close");
         closeButton.setOnAction(e -> closeProgram());
@@ -81,38 +87,61 @@ public class BiblioAlcoolo extends Application {
         return scene;
     }
 
-    private Scene generateLibraryHomePage() {
+    private Scene generateLibrariesPage() {
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(10));
+        layout.setSpacing(8);
 
-        Wine redWine = new Wine("19 Crimes", 14.5, "Australia", WineVariety.WineColour.RED);
-        Wine whiteWine = new Wine("Albert Bichot", 12.5, "France", WineVariety.CHARDONNAY);
-        Beer beer = new Beer("Amacord Gradisca", 5.2, "Italy", BeerColour.BLONDE);
-        Alcohol gin = new Alcohol("1769 Distillery Azura", 42, "Canada");
-        library.addAll(redWine, whiteWine, beer, gin);
+        Label label = new Label("Your Libraries: ");
+        layout.getChildren().add(label);
+
+        for (Library library : user) {
+            Button button = new Button(library.getName());
+            button.setOnAction(e -> {
+                libraryHomePage = generateLibraryHomePage(library);;
+                window.setScene(libraryHomePage);
+            });
+            layout.getChildren().add(button);
+        }
+
+        Button back = new Button("back");
+        back.setOnAction(e -> window.setScene(welcomePage));
+        layout.getChildren().add(back);
+
+        Scene scene = new Scene(layout, WIDTH, HEIGHT);
+        scene.getStylesheets().add(STYLE_SHEET);
+        return scene;
+    }
+
+    private Scene generateLibraryHomePage(Library library) {
+        VBox layout = new VBox();
+        layout.setPadding(new Insets(10));
+        layout.setSpacing(8);
 
         Label libraryName = new Label(library.getName());
-        VBox librariesLayout = new VBox();
-        librariesLayout.setPadding(new Insets(10));
-        librariesLayout.setSpacing(8);
-        librariesLayout.getChildren().add(libraryName);
+        layout.getChildren().add(libraryName);
 
         for (Alcohol alcohol : library) {
             Label label = new Label(alcohol.getName());
-            librariesLayout.getChildren().add(label);
+            layout.getChildren().add(label);
         }
 
         Button addNewAlcohol = new Button("Add new alcohol");
         addNewAlcohol.setOnAction(e -> {
             Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
             library.addAlcohol(alcohol);
-            Scene scene = generateLibraryHomePage();
-            window.setScene(scene);
+            libraryHomePage = generateLibraryHomePage(library);
+            window.setScene(libraryHomePage);
         });
 
-        Button goBack = new Button("back");
-        goBack.setOnAction(e -> window.setScene(welcomePage));
-        librariesLayout.getChildren().addAll(addNewAlcohol,goBack);
+        Button back = new Button("back");
+        back.setOnAction(e -> {
+            librariesPage = generateLibrariesPage();
+            window.setScene(librariesPage);
+        });
+        layout.getChildren().addAll(addNewAlcohol,back);
 
-        Scene scene = new Scene(librariesLayout, WIDTH, HEIGHT);
+        Scene scene = new Scene(layout, WIDTH, HEIGHT);
         scene.getStylesheets().add(STYLE_SHEET);
         return scene;
     }

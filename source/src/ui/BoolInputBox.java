@@ -18,6 +18,7 @@ public class BoolInputBox {
 
     private static final int WIDTH = 250;
     private static final int HEIGHT = 200;
+    private static final String STYLE_SHEET = "ui/biblioStyle.css";
     private static boolean answer;
 
     /**
@@ -48,6 +49,7 @@ public class BoolInputBox {
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
+        //scene.getStylesheets().add(STYLE_SHEET);
         window.setScene(scene);
         window.showAndWait();
 

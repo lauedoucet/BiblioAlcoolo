@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 public class AlertBox {
     private static final int WIDTH = 250;
     private static final int HEIGHT = 200;
+    private static final String STYLE_SHEET = "ui/biblioStyle.css";
 
     /**
      * Sets up a pop-window which stops user from doing anything until they close
@@ -38,6 +39,7 @@ public class AlertBox {
         layout.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
+        //scene.getStylesheets().add(STYLE_SHEET);
         window.setScene(scene);
         window.showAndWait();
     }

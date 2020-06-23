@@ -7,8 +7,9 @@
  */
 package main;
 import java.util.HashMap;
+import java.util.Iterator;
 
-public class User {
+public class User implements Iterable<Library> {
     /****************TODO: Implement as Singleton?****************/
     private String aName;
     private String aPassword;
@@ -32,7 +33,16 @@ public class User {
         return aLibraries.get(name);
     }
 
+    public boolean isEmpty() {
+        return aLibraries.isEmpty();
+    }
+
     public void displayLibraries() {
         aLibraries.forEach((k,v) -> v.displayCollection());
+    }
+
+    @Override
+    public Iterator<Library> iterator() {
+        return aLibraries.values().iterator();
     }
 }
