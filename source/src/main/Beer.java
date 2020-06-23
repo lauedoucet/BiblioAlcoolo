@@ -14,7 +14,7 @@ public class Beer extends Alcohol {
 
     public Beer(String pName, double pABV, String countryName) {
         super(pName, pABV, countryName);
-        // aColour =
+        aColour = BeerColour.NULL;
         aIBU = 0;
     }
 
@@ -48,5 +48,8 @@ public class Beer extends Alcohol {
     public void displayInfo() {
         super.displayInfo();
         System.out.println("Colour:     " + aColour.name().toLowerCase());
+        if (aIBU != 0) {
+            System.out.println("IBU:    " + aIBU);
+        }
     }
 }

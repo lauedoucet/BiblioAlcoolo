@@ -49,6 +49,9 @@ public class Wine extends Alcohol {
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("Variety:    " + aVariety.name().toLowerCase());
+        System.out.println("Colour:    " + aColour.name().toLowerCase());
+        if (aVariety != WineVariety.NULL) {
+            System.out.println("Variety:    " + aVariety.name().toLowerCase());
+        }
     }
 }

@@ -7,7 +7,6 @@
  */
 
 package main;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -19,14 +18,17 @@ public class Library implements Iterable<Alcohol> {
         bottlesByName = new HashMap<String, Alcohol>();
     }
 
-    public Library(ArrayList<Alcohol> boozes) {
-        for (Alcohol alcohol : boozes) {
-            bottlesByName.put(alcohol.getName(), alcohol);
-        }
+    public Library(String pName) {
+        aName = pName;
+        bottlesByName = new HashMap<String, Alcohol>();
     }
 
     public String getName() {
         return aName;
+    }
+
+    public void setName(String pName) {
+        aName = pName;
     }
 
     /**
@@ -56,9 +58,36 @@ public class Library implements Iterable<Alcohol> {
         }
     }
 
+    public boolean addAll(Alcohol... alcoholList) {
+        int i = 0, j = 0;
+        for (Alcohol alcohol : alcoholList) {
+            if (addAlcohol(alcohol)) {
+                i++;
+            }
+            j++;
+        }
+        if (i == j) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Alcohol getByName(String name) {
+        return bottlesByName.get(name);
+    }
+
+    /**
+     * TODO: getByCountry or getByRating?
+     * TODO: sorting methods
+     */
+
     public void displayCollection() {
         System.out.println("Your library contains the following bottles:");
-        bottlesByName.forEach((k,v) -> v.displayInfo());
+        bottlesByName.forEach((k,v) -> {
+            v.displayInfo();
+            System.out.println("/****************************************/");
+        });
     }
 
     @Override

@@ -10,13 +10,15 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
-import main.Alcohol;
-import main.Library;
-import main.User;
+import main.*;
+
+import java.util.Stack;
 
 public class BiblioAlcoolo extends Application {
 
@@ -29,7 +31,7 @@ public class BiblioAlcoolo extends Application {
     private Stage window;
     private Scene welcomePage, librariesPage, libraryHomePage;
 
-    private Library library = new Library();
+    private Library library = new Library("Library 1");
     private User user = new User();
 
     public static void main(String[] args) {
@@ -41,7 +43,25 @@ public class BiblioAlcoolo extends Application {
         window = primaryStage;
         window.setTitle(TITLE + " " + VERSION);
 
-        /*************************welcomePage**********************/
+        welcomePage = generateWelcomePage();
+
+        libraryHomePage = generateLibraryHomePage();
+        libraryHomePage.getStylesheets().add(STYLE_SHEET);
+
+        window.setScene(welcomePage);
+        window.setResizable(false);
+        window.show();
+    }
+
+    private void closeProgram() {
+        /**TODO: save file**/
+        boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
+        if (answer) {
+            window.close();
+        }
+    }
+
+    private Scene generateWelcomePage() {
         Button welcomeButton = new Button(TITLE);
         StackPane.setAlignment(welcomeButton, Pos.CENTER);
         welcomeButton.setOnAction(e -> window.setScene(libraryHomePage));
@@ -56,63 +76,44 @@ public class BiblioAlcoolo extends Application {
 
         StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(welcomeButton, closeButton);
-        welcomePage = new Scene(stackPane, WIDTH, HEIGHT);
-        welcomePage.getStylesheets().add(STYLE_SHEET);
+        Scene scene = new Scene(stackPane, WIDTH, HEIGHT);
+        scene.getStylesheets().add(STYLE_SHEET);
+        return scene;
+    }
 
-        /*************************libraryPage**********************/
-        Label libraryLabel = new Label("Your library: ");
-        GridPane.setConstraints(libraryLabel, 0,0);
+    private Scene generateLibraryHomePage() {
 
-        GridPane alcoholGrid = displayLibrary();
-        GridPane.setConstraints(alcoholGrid, 0, 1);
+        Wine redWine = new Wine("19 Crimes", 14.5, "Australia", WineVariety.WineColour.RED);
+        Wine whiteWine = new Wine("Albert Bichot", 12.5, "France", WineVariety.CHARDONNAY);
+        Beer beer = new Beer("Amacord Gradisca", 5.2, "Italy", BeerColour.BLONDE);
+        Alcohol gin = new Alcohol("1769 Distillery Azura", 42, "Canada");
+        library.addAll(redWine, whiteWine, beer, gin);
+
+        Label libraryName = new Label(library.getName());
+        VBox librariesLayout = new VBox();
+        librariesLayout.setPadding(new Insets(10));
+        librariesLayout.setSpacing(8);
+        librariesLayout.getChildren().add(libraryName);
+
+        for (Alcohol alcohol : library) {
+            Label label = new Label(alcohol.getName());
+            librariesLayout.getChildren().add(label);
+        }
 
         Button addNewAlcohol = new Button("Add new alcohol");
-        GridPane.setConstraints(addNewAlcohol, 1, 0);
-        GridPane.setFillWidth(addNewAlcohol, true);
         addNewAlcohol.setOnAction(e -> {
             Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
-            if (!library.addAlcohol(alcohol)) {
-                library.addAlcohol(alcohol.getName(), alcohol.getABV(), alcohol.getCountry());
-            }
-            /**TODO: remove later**/
-            library.displayCollection();
+            library.addAlcohol(alcohol);
+            Scene scene = generateLibraryHomePage();
+            window.setScene(scene);
         });
 
         Button goBack = new Button("back");
-        GridPane.setConstraints(goBack, 1,1);
         goBack.setOnAction(e -> window.setScene(welcomePage));
+        librariesLayout.getChildren().addAll(addNewAlcohol,goBack);
 
-        GridPane gridPane1 = new GridPane();
-        gridPane1.setPadding(new Insets(10,10,10,10));
-        gridPane1.setVgap(8);
-        gridPane1.setHgap(8);
-        gridPane1.getChildren().addAll(libraryLabel, alcoholGrid, addNewAlcohol, goBack);
-
-        libraryHomePage = new Scene(gridPane1, WIDTH, HEIGHT);
-        libraryHomePage.getStylesheets().add(STYLE_SHEET);
-
-        window.setScene(welcomePage);
-        window.setResizable(false);
-        window.show();
-    }
-
-    private GridPane displayLibrary() {
-        GridPane grid = new GridPane();
-        int i = 0;
-        for (Alcohol alcohol : library) {
-            Label label = new Label(alcohol.getName());
-            GridPane.setConstraints(label, 0, i);
-            grid.getChildren().add(label);
-            i++;
-        }
-        return grid;
-    }
-
-    private void closeProgram() {
-        /**TODO: save file**/
-        boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
-        if (answer) {
-            window.close();
-        }
+        Scene scene = new Scene(librariesLayout, WIDTH, HEIGHT);
+        scene.getStylesheets().add(STYLE_SHEET);
+        return scene;
     }
 }
