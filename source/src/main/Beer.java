@@ -24,6 +24,12 @@ public class Beer extends Alcohol {
         aIBU = 0;
     }
 
+    public Beer(String pName, double pABV, String countryName, BeerColour pColour, int pIBU) {
+        super(pName, pABV, countryName);
+        aColour = pColour;
+        aIBU = pIBU;
+    }
+
     public void setColour(BeerColour pColour) {
         aColour = pColour;
     }

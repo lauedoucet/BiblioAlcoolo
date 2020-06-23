@@ -9,49 +9,49 @@
 package main;
 
 public class Wine extends Alcohol {
-    private WineVariety aVariety;
-    private WineVariety.WineColour aColour;
+    private WineColour aColour;
+    private String aVariety;
 
     public Wine(String pName, double pABV, String countryName) {
         super(pName, pABV, countryName);
-        aVariety = WineVariety.NULL;
-        aColour = WineVariety.WineColour.NULL;
+        aColour = WineColour.NULL;
     }
 
-    public Wine(String pName, double pABV, String countryName, WineVariety pVariety) {
+    public Wine(String pName, double pABV, String countryName, WineColour pColour, String pVariety) {
         super(pName, pABV, countryName);
-        aVariety = pVariety;
-        aColour = pVariety.aColour;
-    }
-
-    public Wine(String pName, double pABV, String countryName, WineVariety.WineColour pColour) {
-        super(pName, pABV, countryName);
-        aVariety = WineVariety.NULL;
         aColour = pColour;
-    }
-
-    public void setVariety(WineVariety pVariety) {
         aVariety = pVariety;
     }
 
-    public void setColour(WineVariety.WineColour pColour){
+    public Wine(String pName, double pABV, String countryName, WineColour pColour) {
+        super(pName, pABV, countryName);
         aColour = pColour;
     }
 
-    public WineVariety getVariety() {
+    public void setVariety(String pVariety) {
+        aVariety = pVariety;
+    }
+
+    public void setColour(WineColour pColour){
+        aColour = pColour;
+    }
+
+    public String getVariety() {
         return aVariety;
     }
 
-    public WineVariety.WineColour getColour() {
+    public WineColour getColour() {
         return aColour;
     }
 
     @Override
     public void displayInfo() {
         super.displayInfo();
-        System.out.println("Colour:    " + aColour.name().toLowerCase());
-        if (aVariety != WineVariety.NULL) {
-            System.out.println("Variety:    " + aVariety.name().toLowerCase());
+        if (aColour != WineColour.NULL) {
+            System.out.println("Colour:    " + aColour.name().toLowerCase());
+        }
+        if (aVariety != null) {
+            System.out.println("Variety:    " + aVariety);
         }
     }
 }
