@@ -48,18 +48,9 @@ public class BiblioAlcoolo extends Application {
         window.setTitle(TITLE + " " + VERSION);
 
         welcomePage = generateWelcomePage();
-
         window.setScene(welcomePage);
         window.setResizable(false);
         window.show();
-    }
-
-    private void closeProgram() {
-        /**TODO: save file**/
-        boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
-        if (answer) {
-            window.close();
-        }
     }
 
     private Scene generateWelcomePage() {
@@ -144,5 +135,13 @@ public class BiblioAlcoolo extends Application {
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
         scene.getStylesheets().add(STYLE_SHEET);
         return scene;
+    }
+
+    private void closeProgram() {
+        /**TODO: save file**/
+        boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
+        if (answer) {
+            window.close();
+        }
     }
 }

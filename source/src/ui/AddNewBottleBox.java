@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
@@ -21,8 +22,8 @@ import main.Alcohol;
 
 public class AddNewBottleBox {
 
-    private static final int WIDTH = 450;
-    private static final int HEIGHT = 250;
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 300;
     private static final String STYLE_SHEET = "ui/biblioStyle.css";
     private static Alcohol alcohol;
 
@@ -36,6 +37,15 @@ public class AddNewBottleBox {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Add new alcohol");
 
+        Scene scene = new Scene(generateAlcoholLayout(window), WIDTH, HEIGHT);
+        scene.getStylesheets().add(STYLE_SHEET);
+        window.setScene(scene);
+        window.showAndWait();
+
+        return alcohol;
+    }
+
+    private static GridPane generateAlcoholLayout(Stage window) {
         Text nameLabel = new Text("Name: ");
         GridPane.setConstraints(nameLabel, 0,0);
         Text abvLabel = new Text("ABV: ");
@@ -54,7 +64,7 @@ public class AddNewBottleBox {
         GridPane.setConstraints(countryField, 1, 2);
 
         Button addAlcohol = new Button("Add");
-        GridPane.setConstraints(addAlcohol, 1, 3);
+        GridPane.setConstraints(addAlcohol, 1, 5);
         GridPane.setFillWidth(addAlcohol, true);
         addAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -63,27 +73,91 @@ public class AddNewBottleBox {
                 try {
                     double abv = Double.parseDouble(abvField.getText());
                     String country = countryField.getText();
-                     alcohol = new Alcohol(name, abv, country);
-                     /**TODO: update**/
-                     System.out.println("new alcohol logged");
-                     window.close();
+                    alcohol = new Alcohol(name, abv, country);
+                    /**TODO: update**/
+                    System.out.println("new alcohol logged");
+                    window.close();
                 } catch (NumberFormatException e) {
                     AlertBox.display("Invalid Input", "Please enter numbers for size and ABV");
                 }
             }
         });
 
-        GridPane gridPane = new GridPane();
-        gridPane.setPadding(new Insets(10,10,10,10));
-        gridPane.setVgap(8);
-        gridPane.setHgap(8);
-        gridPane.getChildren().addAll(nameLabel, abvLabel, countryLabel, nameField, abvField, countryField, addAlcohol);
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll("Alcohol", "Wine", "Beer");
+        GridPane.setConstraints(choiceBox, 2,5);
 
-        Scene scene = new Scene(gridPane, WIDTH, HEIGHT);
-        scene.getStylesheets().add(STYLE_SHEET);
-        window.setScene(scene);
-        window.showAndWait();
+        choiceBox.getSelectionModel().selectedItemProperty().addListener( (v, oldVal, newVal) -> {
+            switch(newVal) {
+                case "Alcohol" :
+                    Scene scene = new Scene(generateAlcoholLayout(window), WIDTH, HEIGHT);
+                    scene.getStylesheets().add(STYLE_SHEET);
+                    window.setScene(scene);
+                    break;
+                case "Wine" :
+                    scene = new Scene(generateWineLayout(window), WIDTH, HEIGHT + 200);
+                    scene.getStylesheets().add(STYLE_SHEET);
+                    window.setScene(scene);
+                    break;
+                case "Beer" :
+                    scene = new Scene(generateBeerLayout(window), WIDTH, HEIGHT + 200);
+                    scene.getStylesheets().add(STYLE_SHEET);
+                    window.setScene(scene);
+                    break;
+            }
+        });
 
-        return alcohol;
+        GridPane layout = new GridPane();
+        layout.setPadding(new Insets(10,10,10,10));
+        layout.setVgap(8);
+        layout.setHgap(8);
+        layout.getChildren().addAll(nameLabel, abvLabel, countryLabel);
+        layout.getChildren().addAll(nameField, abvField, countryField);
+        layout.getChildren().addAll(addAlcohol, choiceBox);
+
+        return layout;
     }
+
+    private static GridPane generateWineLayout(Stage window) {
+        GridPane layout = generateAlcoholLayout(window);
+
+        Text colourLabel = new Text("Colour: ");
+        GridPane.setConstraints(colourLabel, 0,3);
+        Text varietyLabel = new Text("Variety: ");
+        GridPane.setConstraints(varietyLabel, 0,4);
+
+        TextField colourField = new TextField();
+        colourField.setPromptText("Wine colour");
+        GridPane.setConstraints(colourField, 1,3);
+        TextField varietyField = new TextField();
+        varietyField.setPromptText("Grape variety");
+        GridPane.setConstraints(varietyField, 1,4);
+
+        /**TODO: change add alcohol button **/
+        layout.getChildren().addAll(colourLabel, varietyLabel, colourField, varietyField);
+
+        return layout;
+    }
+
+    private static GridPane generateBeerLayout(Stage window) {
+        GridPane layout = generateAlcoholLayout(window);
+
+        Text colourLabel = new Text("Colour: ");
+        GridPane.setConstraints(colourLabel, 0,3);
+        Text ibuLabel = new Text("IBU: ");
+        GridPane.setConstraints(ibuLabel, 0,4);
+
+        TextField colourField = new TextField();
+        colourField.setPromptText("Beer colour");
+        GridPane.setConstraints(colourField, 1,3);
+        TextField ibuField = new TextField();
+        ibuField.setPromptText("International Bitterness Unit");
+        GridPane.setConstraints(ibuField, 1,4);
+
+        /**TODO: change add alcohol button **/
+        layout.getChildren().addAll(colourLabel, ibuLabel, colourField, ibuField);
+
+        return layout;
+    }
+
 }
