@@ -20,7 +20,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.*;
 
-public class AddNewBottleBox {
+public class AddNewBox {
 
     private static final int WIDTH = 550;
     private static final int HEIGHT = 300;
@@ -30,7 +30,20 @@ public class AddNewBottleBox {
     private static TextField nameField, abvField, countryField;
     private static Button addAlcohol;
     private static Alcohol alcohol;
+    private static Library library;
 
+    public static Library getNewLibrary() {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Add new alcohol");
+
+        Scene scene = new Scene(generateLibraryLayout(window), WIDTH, HEIGHT);
+        scene.getStylesheets().add(STYLE_SHEET);
+        window.setScene(scene);
+        window.showAndWait();
+
+        return library;
+    }
     /**
      * Sets up window which needs to be completed to go back to library page
      * Asks user for the name, size (in ml), and ABV (in %) for the new bottle
@@ -47,6 +60,34 @@ public class AddNewBottleBox {
         window.showAndWait();
 
         return alcohol;
+    }
+
+    private static GridPane generateLibraryLayout(Stage window) {
+        nameLabel = new Text("Name: ");
+        GridPane.setConstraints(nameLabel, 0,0);
+
+        nameField = new TextField();
+        nameField.setPromptText("Name of library");
+        GridPane.setConstraints(nameField, 1,0);
+
+        Button addLibrary = new Button("Add");
+        GridPane.setConstraints(addLibrary, 1, 5);
+        addLibrary.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String name = nameField.getText();
+                library = new Library(name);
+                window.close();
+            }
+        });
+
+        GridPane layout = new GridPane();
+        layout.setPadding(new Insets(10,10,10,10));
+        layout.setVgap(8);
+        layout.setHgap(8);
+        layout.getChildren().addAll(nameLabel, nameField, addLibrary);
+
+        return layout;
     }
 
     /**

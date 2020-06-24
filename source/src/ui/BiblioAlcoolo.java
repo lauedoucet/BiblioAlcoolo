@@ -10,11 +10,14 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.control.*;
 import main.*;
+
+import java.util.ArrayList;
 
 
 public class BiblioAlcoolo extends Application {
@@ -27,6 +30,7 @@ public class BiblioAlcoolo extends Application {
 
     private Stage window;
     private Scene welcomePage, librariesPage, libraryHomePage;
+    private Tooltip tooltip = new Tooltip();
 
     private User user = new User();
 
@@ -79,12 +83,14 @@ public class BiblioAlcoolo extends Application {
     }
 
     private Scene generateLibrariesPage() {
-        VBox layout = new VBox();
-        layout.setPadding(new Insets(10));
-        layout.setSpacing(8);
+        BorderPane layout = new BorderPane();
+
+        VBox librariesName = new VBox();
+        librariesName.setPadding(new Insets(10));
+        librariesName.setSpacing(8);
 
         Label label = new Label("Your Libraries: ");
-        layout.getChildren().add(label);
+        librariesName.getChildren().add(label);
 
         for (Library library : user) {
             Button button = new Button(library.getName());
@@ -92,12 +98,23 @@ public class BiblioAlcoolo extends Application {
                 libraryHomePage = generateLibraryHomePage(library);;
                 window.setScene(libraryHomePage);
             });
-            layout.getChildren().add(button);
+            librariesName.getChildren().add(button);
         }
+        layout.setLeft(librariesName);
+
+        Button addNewLibrary = new Button("Add new library");
+        addNewLibrary.setOnAction(e -> {
+            Library library = AddNewBox.getNewLibrary();
+            user.addLibrary(library);
+            libraryHomePage = generateLibraryHomePage(library);
+            window.setScene(libraryHomePage);
+        });
+        librariesName.getChildren().add(addNewLibrary);
 
         Button back = new Button("back");
         back.setOnAction(e -> window.setScene(welcomePage));
-        layout.getChildren().add(back);
+        layout.setBottom(back);
+        BorderPane.setAlignment(back, Pos.BOTTOM_RIGHT);
 
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
         scene.getStylesheets().add(STYLE_SHEET);
@@ -105,36 +122,92 @@ public class BiblioAlcoolo extends Application {
     }
 
     private Scene generateLibraryHomePage(Library library) {
-        VBox layout = new VBox();
-        layout.setPadding(new Insets(10));
-        layout.setSpacing(8);
-
+        BorderPane layout = new BorderPane();
         Label libraryName = new Label(library.getName());
-        layout.getChildren().add(libraryName);
+        layout.setTop(libraryName);
+        BorderPane.setAlignment(libraryName, Pos.CENTER);
+
+        // StackPane for alcohol info
+        StackPane alcoholInfo = new StackPane();
+
+        VBox info = new VBox();
+        alcoholInfo.getChildren().add(info);
+        StackPane.setAlignment(info, Pos.BOTTOM_CENTER);
+        layout.setCenter(alcoholInfo);
+
+        // VBox for alcohol names and add button
+        VBox alcoholNames = new VBox();
+        alcoholNames.setPadding(new Insets(10));
+        alcoholNames.setSpacing(8);
 
         for (Alcohol alcohol : library) {
-            Label label = new Label(alcohol.getName());
-            layout.getChildren().add(label);
+            Button button = new Button(alcohol.getName());
+            button.setOnAction(e -> {
+                info.getChildren().clear();
+                info.getChildren().addAll(getAlcoholInfo(alcohol));
+            });
+            alcoholNames.getChildren().addAll(button);
         }
 
         Button addNewAlcohol = new Button("Add new alcohol");
         addNewAlcohol.setOnAction(e -> {
-            Alcohol alcohol = AddNewBottleBox.getNewAlcohol();
+            Alcohol alcohol = AddNewBox.getNewAlcohol();
             library.addAlcohol(alcohol);
             libraryHomePage = generateLibraryHomePage(library);
             window.setScene(libraryHomePage);
         });
+        alcoholNames.getChildren().add(addNewAlcohol);
+        layout.setLeft(alcoholNames);
 
         Button back = new Button("back");
         back.setOnAction(e -> {
             librariesPage = generateLibrariesPage();
             window.setScene(librariesPage);
         });
-        layout.getChildren().addAll(addNewAlcohol,back);
+        layout.setBottom(back);
+        BorderPane.setAlignment(back, Pos.BOTTOM_RIGHT);
 
         Scene scene = new Scene(layout, WIDTH, HEIGHT);
         scene.getStylesheets().add(STYLE_SHEET);
         return scene;
+    }
+
+    /**
+     * Returns labels to display the information relevant to this alcohol
+     * @param alcohol whose parameters we want to display
+     * @return labels to be displayed in an ArrayList
+     */
+    private ArrayList<Label> getAlcoholInfo(Alcohol alcohol) {
+        ArrayList<Label> labels = new ArrayList<>();
+        Label name = new Label("Name:       " + alcohol.getName());
+        Label abv = new Label("ABV:          " + alcohol.getABV() + "%");
+        Label country = new Label("Country:     " + alcohol.getCountry());
+        labels.add(name);
+        labels.add(abv);
+        labels.add(country);
+
+        if (alcohol.getClass() == Wine.class) {
+            Wine wine = (Wine) alcohol;
+            if (wine.getColour() != WineColour.NULL) {
+                Label colour = new Label("Colour:        " + wine.getColour().name().toLowerCase());
+                labels.add(colour);
+            }
+            if (wine.getVariety() != "") {
+                Label variety = new Label("Variety:          " + wine.getVariety());
+                labels.add(variety);
+            }
+        } else if (alcohol.getClass() == Beer.class) {
+          Beer beer = (Beer) alcohol;
+          if (beer.getColour() != BeerColour.NULL) {
+              Label colour = new Label("Colour:   " + beer.getColour().name().toLowerCase());
+              labels.add(colour);
+          }
+          if (beer.getIBU() != 0) {
+              Label ibu = new Label("IBU:     " + beer.getIBU());
+              labels.add(ibu);
+          }
+        }
+        return labels;
     }
 
     private void closeProgram() {

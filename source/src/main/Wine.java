@@ -15,6 +15,7 @@ public class Wine extends Alcohol {
     public Wine(String pName, double pABV, String countryName) {
         super(pName, pABV, countryName);
         aColour = WineColour.NULL;
+        aVariety = "";
     }
 
     public Wine(String pName, double pABV, String countryName, WineColour pColour, String pVariety) {
@@ -26,6 +27,7 @@ public class Wine extends Alcohol {
     public Wine(String pName, double pABV, String countryName, WineColour pColour) {
         super(pName, pABV, countryName);
         aColour = pColour;
+        aVariety = "";
     }
 
     public void setVariety(String pVariety) {
