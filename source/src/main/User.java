@@ -33,6 +33,10 @@ public class User implements Iterable<Library> {
         return aLibraries.get(name);
     }
 
+    public int getSize() {
+        return aLibraries.size();
+    }
+
     public boolean isEmpty() {
         return aLibraries.isEmpty();
     }

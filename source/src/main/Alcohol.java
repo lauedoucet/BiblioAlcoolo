@@ -8,7 +8,9 @@
 
 package main;
 
-public class Alcohol {
+import java.io.Serializable;
+
+public class Alcohol implements Serializable {
     private String aName;
     private int aRating;
     private double aABV;

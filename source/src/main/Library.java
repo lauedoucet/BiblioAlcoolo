@@ -27,6 +27,10 @@ public class Library implements Iterable<Alcohol> {
         return aName;
     }
 
+    public int getSize() {
+        return bottlesByName.size();
+    }
+
     public void setName(String pName) {
         aName = pName;
     }
