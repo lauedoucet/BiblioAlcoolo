@@ -22,8 +22,8 @@ import java.util.ArrayList;
 
 public class BiblioAlcoolo extends Application {
 
-    private static final int WIDTH = 680;
-    private static final int HEIGHT = 500;
+    private static final int WIDTH = 720;
+    private static final int HEIGHT = 720;
     private static final String TITLE = "BiblioAlcoolo";
     private static final String VERSION = "1.0";
     private static final String STYLE_SHEET = "ui/biblioStyle.css";
@@ -38,7 +38,7 @@ public class BiblioAlcoolo extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
        user.loadFile();
 
         window = primaryStage;
@@ -59,6 +59,7 @@ public class BiblioAlcoolo extends Application {
             librariesPage.getStylesheets().add(STYLE_SHEET);
             window.setScene(librariesPage);
         });
+        welcomeButton.setId("bold-button");
 
         Button closeButton = new Button("close");
         closeButton.setOnAction(e -> closeProgram());
@@ -83,6 +84,7 @@ public class BiblioAlcoolo extends Application {
         librariesName.setSpacing(8);
 
         Label label = new Label("Your Libraries: ");
+        label.setId("bold-label");
         librariesName.getChildren().add(label);
 
         for (Library library : user) {
@@ -102,6 +104,7 @@ public class BiblioAlcoolo extends Application {
             libraryHomePage = generateLibraryHomePage(library);
             window.setScene(libraryHomePage);
         });
+        addNewLibrary.setId("add-button");
         librariesName.getChildren().add(addNewLibrary);
 
         Button back = new Button("back");
@@ -117,6 +120,7 @@ public class BiblioAlcoolo extends Application {
     private Scene generateLibraryHomePage(Library library) {
         BorderPane layout = new BorderPane();
         Label libraryName = new Label(library.getName());
+        libraryName.setId("bold-label");
         layout.setTop(libraryName);
         BorderPane.setAlignment(libraryName, Pos.CENTER);
 
@@ -149,6 +153,7 @@ public class BiblioAlcoolo extends Application {
             libraryHomePage = generateLibraryHomePage(library);
             window.setScene(libraryHomePage);
         });
+        addNewAlcohol.setId("add-button");
         alcoholNames.getChildren().add(addNewAlcohol);
         layout.setLeft(alcoholNames);
 

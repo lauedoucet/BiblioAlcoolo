@@ -80,6 +80,7 @@ public class AddNewBox {
                 window.close();
             }
         });
+        addLibrary.setId("add-button");
 
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(10,10,10,10));
@@ -132,6 +133,7 @@ public class AddNewBox {
                 }
             }
         });
+        addAlcohol.setId("add-button");
 
         // User choice for which type of alcohol they want to add, changes the layout accordingly
         ComboBox<String> comboBox = new ComboBox<>();
@@ -233,6 +235,7 @@ public class AddNewBox {
                 }
             }
         });
+        addAlcohol.setId("add-button");
 
         layout.getChildren().addAll(colourLabel, varietyLabel, colourField, varietyField, addAlcohol);
 
@@ -303,7 +306,7 @@ public class AddNewBox {
                 }
             }
         });
-
+        addAlcohol.setId("add-button");
         layout.getChildren().addAll(colourLabel, ibuLabel, colourField, ibuField, addAlcohol);
 
         return layout;

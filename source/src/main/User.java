@@ -11,11 +11,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class User implements Iterable<Library> {
-    /****************TODO: Implement as Singleton?****************/
     private String aName;
     private String aPassword;
     private HashMap<String, Library> aLibraries;
-    private static final String SAVE_FILE = "save";
+    private static final String SAVE_FILE = "source/saves/save";
 
     public User() {
         aLibraries = new HashMap<String, Library>();
