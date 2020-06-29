@@ -22,8 +22,8 @@ import main.*;
 
 public class AddNewBox {
 
-    private static final int WIDTH = 550;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 200;
     private static final String STYLE_SHEET = "ui/biblioStyle.css";
 
     private static Text nameLabel, abvLabel, countryLabel;
