@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.*;
 import main.*;
 
-import java.io.*;
 import java.util.ArrayList;
 
 
@@ -28,11 +27,9 @@ public class BiblioAlcoolo extends Application {
     private static final String TITLE = "BiblioAlcoolo";
     private static final String VERSION = "1.0";
     private static final String STYLE_SHEET = "ui/biblioStyle.css";
-    private static final String FILE_PATH = "savefile.txt";
 
     private Stage window;
     private Scene welcomePage, librariesPage, libraryHomePage;
-    private Tooltip tooltip = new Tooltip();
 
     private User user = new User();
 
@@ -41,14 +38,8 @@ public class BiblioAlcoolo extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        /** TEST START **/
-        user.addLibrary(new Library("Collection 1"));
-        Wine redWine = new Wine("19 Crimes", 14.5, "Australia");
-        Wine whiteWine = new Wine("Albert Bichot", 11.8, "France");
-        Beer beer = new Beer("Amacord Gradisca", 5.2, "Italy");
-        user.getLibrary("Collection 1").addAll(redWine, whiteWine, beer);
-        /** TEST END **/
+    public void start(Stage primaryStage) {
+       user.loadFile();
 
         window = primaryStage;
         window.setTitle(TITLE + " " + VERSION);
@@ -216,47 +207,7 @@ public class BiblioAlcoolo extends Application {
 
         boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
         if (answer) {
-            /**TODO: save file**/
-            String file = FILE_PATH;
-            try {
-                ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream((new FileOutputStream(file))));
-
-                out.writeInt(user.getSize());
-                for (Library library : user) {
-                    out.writeUTF(library.getName());
-                    out.writeInt(library.getSize());
-                    for (Alcohol alcohol : library) {
-                        out.writeObject(alcohol);
-                    }
-                }
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-
-            /** TESTING **/
-            try {
-                ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-                int userSize = in.readInt();
-                while (userSize > 0) {
-                    System.out.println("Library:    " + in.readUTF());
-                    int libSize = in.readInt();
-
-                    while (libSize > 0) {
-                        Alcohol alcohol = (Alcohol) in.readObject();
-                        System.out.println(alcohol.getName());
-                        libSize--;
-                    }
-                    userSize--;
-                }
-
-            } catch (ClassNotFoundException e) {
-                System.out.println(e);
-
-            } catch (IOException e) {
-                System.out.println(e);
-            }
-
-
+            user.saveFile();
             window.close();
         }
     }

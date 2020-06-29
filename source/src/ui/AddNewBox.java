@@ -217,10 +217,8 @@ public class AddNewBox {
                     if (!varietyField.getText().isEmpty()) {
                         String variety = varietyField.getText();
                         alcohol = new Wine(name, abv, country, colour, variety);
-                        alcohol.displayInfo();
                     } else if (colour != WineColour.NULL) {
                         alcohol = new Wine(name, abv, country, colour);
-                        alcohol.displayInfo();
                     } else {
                         alcohol = new Wine(name, abv, country);
                     }
@@ -289,10 +287,8 @@ public class AddNewBox {
                     if (!ibuField.getText().isEmpty()) {
                         int ibu = Integer.parseInt(ibuField.getText());
                         alcohol = new Beer(name, abv, country, colour, ibu);
-                        alcohol.displayInfo();
                     } else if (colour != BeerColour.NULL) {
                         alcohol = new Beer(name, abv, country, colour);
-                        alcohol.displayInfo();
                     } else {
                         alcohol = new Beer(name, abv, country);
                     }
