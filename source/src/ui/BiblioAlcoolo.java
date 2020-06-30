@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,11 @@ public class BiblioAlcoolo extends Application {
         window.show();
     }
 
+    /**
+     * Scene displays simple view of App name and close button
+     * TODO: add animation of wine flowing
+     * @return scene layout for welcome page
+     */
     private Scene generateWelcomePage() {
         Button welcomeButton = new Button(TITLE);
         StackPane.setAlignment(welcomeButton, Pos.CENTER);
@@ -76,6 +82,10 @@ public class BiblioAlcoolo extends Application {
         return scene;
     }
 
+    /**
+     * Scene which displays the page containing all of the user's libraries
+     * @return scene layout
+     */
     private Scene generateLibrariesPage() {
         BorderPane layout = new BorderPane();
 
@@ -83,9 +93,10 @@ public class BiblioAlcoolo extends Application {
         librariesName.setPadding(new Insets(10));
         librariesName.setSpacing(8);
 
-        Label label = new Label("Your Libraries: ");
+        Label label = new Label("Your Libraries");
         label.setId("bold-label");
-        librariesName.getChildren().add(label);
+        layout.setTop(label);
+        BorderPane.setAlignment(label, Pos.CENTER);
 
         for (Library library : user) {
             Button button = new Button(library.getName());
@@ -107,6 +118,13 @@ public class BiblioAlcoolo extends Application {
         addNewLibrary.setId("add-button");
         librariesName.getChildren().add(addNewLibrary);
 
+        Button modify = new Button("Modify");
+        modify.setOnAction(e -> {
+            System.out.println("entered modify view");
+        });
+        modify.setId("add-button");
+        librariesName.getChildren().add(modify);
+
         Button back = new Button("back");
         back.setOnAction(e -> window.setScene(welcomePage));
         layout.setBottom(back);
@@ -117,6 +135,11 @@ public class BiblioAlcoolo extends Application {
         return scene;
     }
 
+    /**
+     * Generates a scene which displays the contents of the input library
+     * @param library library to display
+     * @return scene layout
+     */
     private Scene generateLibraryHomePage(Library library) {
         BorderPane layout = new BorderPane();
         Label libraryName = new Label(library.getName());
@@ -156,6 +179,13 @@ public class BiblioAlcoolo extends Application {
         addNewAlcohol.setId("add-button");
         alcoholNames.getChildren().add(addNewAlcohol);
         layout.setLeft(alcoholNames);
+
+        Button modify = new Button("Modify");
+        modify.setOnAction(e -> {
+            System.out.println("entered modify view");
+        });
+        modify.setId("add-button");
+        alcoholNames.getChildren().add(modify);
 
         Button back = new Button("back");
         back.setOnAction(e -> {
@@ -209,7 +239,6 @@ public class BiblioAlcoolo extends Application {
     }
 
     private void closeProgram() {
-
         boolean answer = BoolInputBox.display("Closing?", "Sure you want to exit?");
         if (answer) {
             user.saveFile();
