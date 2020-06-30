@@ -77,6 +77,10 @@ public class Library implements Iterable<Alcohol> {
         }
     }
 
+    public void removeAlcohol(Alcohol alcohol) {
+        bottlesByName.remove(alcohol.getName());
+    }
+
     public Alcohol getByName(String name) {
         return bottlesByName.get(name);
     }

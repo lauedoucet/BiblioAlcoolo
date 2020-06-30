@@ -1,12 +1,5 @@
-/*
- *
- *   Copyright (C) 2020 Laurence Doucet
- *   App that allows the management and record of alcohol
- *   Class represents a pop-window which gets input from user to create add a new alcohol to library
- *
- */
-
 package ui;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -14,123 +7,110 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.*;
 
-public class AddNewBox {
-
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 200;
-    private static final String STYLE_SHEET = "ui/biblioStyle.css";
-
-    private static Label nameLabel, abvLabel, countryLabel;
-    private static TextField nameField, abvField, countryField;
+public class ModifyBox extends AddNewBox {
     private static Button modAlcohol;
-    private static Alcohol alcohol;
-    private static Library library;
+    private static TextField nameField, abvField, countryField;
 
-    public static int getWIDTH() {
-        return WIDTH;
-    }
-
-    public static int getHEIGHT() {
-        return HEIGHT;
-    }
-
-    public static String getStyleSheet() {
-        return STYLE_SHEET;
-    }
-
-    public static Library getNewLibrary() {
+    public static void modifyLibrary(Library library) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Add new library");
+        window.setTitle("Modify library");
 
-        Scene scene = new Scene(generateLibraryLayout(window), WIDTH, HEIGHT);
-        scene.getStylesheets().add(STYLE_SHEET);
+        Scene scene = new Scene(generateLibraryLayout(window, library), getWIDTH(), getHEIGHT());
+        scene.getStylesheets().add(getStyleSheet());
         window.setScene(scene);
         window.showAndWait();
-
-        return library;
     }
+
     /**
-     * Sets up window which needs to be completed to go back to library page
-     * Asks user for the name, size (in ml), and ABV (in %) for the new bottle
-     * @returns the new alcohol object created
+     * @Overload of AddNewBox.generateLibraryLayout
+     * @param window
+     * @param library
+     * @return
      */
-    public static Alcohol getNewAlcohol() {
-        Stage window = new Stage();
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Add new alcohol");
-
-        Scene scene = new Scene(generateAlcoholLayout(window), WIDTH, HEIGHT);
-        scene.getStylesheets().add(STYLE_SHEET);
-        window.setScene(scene);
-        window.showAndWait();
-
-        return alcohol;
-    }
-
-    public static GridPane generateLibraryLayout(Stage window) {
-        nameLabel = new Label("Name: ");
+    public static GridPane generateLibraryLayout(Stage window, Library library) {
+        Label nameLabel = new Label("Name: ");
         GridPane.setConstraints(nameLabel, 0,0);
 
-        nameField = new TextField();
-        nameField.setPromptText("Name of library");
+        TextField nameField = new TextField();
+        nameField.setText(library.getName());
         GridPane.setConstraints(nameField, 1,0);
 
-        Button addLibrary = new Button("Add");
-        GridPane.setConstraints(addLibrary, 1, 5);
-        addLibrary.setOnAction(new EventHandler<ActionEvent>() {
+        javafx.scene.control.Button modLibrary = new Button("Modify");
+        GridPane.setConstraints(modLibrary, 1, 5);
+        modLibrary.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String name = nameField.getText();
-                library = new Library(name);
+                library.setName(name);
                 window.close();
             }
         });
-        addLibrary.setId("add-button");
+        modLibrary.setId("add-button");
 
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(10,10,10,10));
         layout.setVgap(8);
         layout.setHgap(8);
-        layout.getChildren().addAll(nameLabel, nameField, addLibrary);
+        layout.getChildren().addAll(nameLabel, nameField, modLibrary);
 
         return layout;
     }
 
-    /**
-     * Generates a GridPane layout which takes input from user to create an Alcohol object
-     * @param window = stage for the layout
-     * @return the layout in a GridPane
-     */
-    private static GridPane generateAlcoholLayout(Stage window) {
+    public static void modifyAlcohol(Alcohol alcohol) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle("Modify alcohol");
+
+        if (alcohol.getClass() == Wine.class) {
+            Wine wine = (Wine) alcohol;
+            Scene scene = new Scene(generateWineLayout(window, wine), getWIDTH() + 50, getHEIGHT() + 50);
+            scene.getStylesheets().add(getStyleSheet());
+            window.setScene(scene);
+            window.showAndWait();
+        } else if (alcohol.getClass() == Beer.class) {
+            Beer beer = (Beer) alcohol;
+            Scene scene = new Scene(generateBeerLayout(window, beer), getWIDTH() + 50, getHEIGHT() + 50);
+            scene.getStylesheets().add(getStyleSheet());
+            window.setScene(scene);
+            window.showAndWait();
+        } else {
+            Scene scene = new Scene(generateAlcoholLayout(window, alcohol), getWIDTH(), getHEIGHT());
+            scene.getStylesheets().add(getStyleSheet());
+            window.setScene(scene);
+            window.showAndWait();
+        }
+    }
+
+    private static GridPane generateAlcoholLayout(Stage window, Alcohol alcohol) {
         // Basic labels
-        nameLabel = new Label("Name: ");
+        Label nameLabel = new Label("Name: ");
         GridPane.setConstraints(nameLabel, 0,0);
-        abvLabel = new Label("ABV: ");
+        Label abvLabel = new Label("ABV: ");
         GridPane.setConstraints(abvLabel, 0,1);
-        countryLabel = new Label("Country: ");
+        Label countryLabel = new Label("Country: ");
         GridPane.setConstraints(countryLabel, 0, 2);
 
         // Basic fields
         nameField = new TextField();
-        nameField.setPromptText("Name of alcohol");
+        nameField.setText(alcohol.getName());
         GridPane.setConstraints(nameField, 1,0);
         abvField = new TextField();
-        abvField.setPromptText("Alcohol by volume %");
+        abvField.setText("" + alcohol.getABV());
         GridPane.setConstraints(abvField, 1,1);
         countryField = new TextField();
-        countryField.setPromptText("Country of origin");
+        countryField.setText(alcohol.getCountry());
         GridPane.setConstraints(countryField, 1, 2);
 
         // Button takes user input and creates a generic Alcohol object
-        modAlcohol = new Button("Add");
+        modAlcohol = new Button("Modify");
         GridPane.setConstraints(modAlcohol, 1, 5);
         modAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -139,7 +119,9 @@ public class AddNewBox {
                 try {
                     double abv = Double.parseDouble(abvField.getText());
                     String country = countryField.getText();
-                    alcohol = new Alcohol(name, abv, country);
+                    alcohol.setName(name);
+                    alcohol.setABV(abv);
+                    alcohol.setCountry(country);
                     window.close();
                 } catch (NumberFormatException e) {
                     AlertBox.display("Invalid Input", "Please enter a number for ABV");
@@ -148,30 +130,6 @@ public class AddNewBox {
         });
         modAlcohol.setId("add-button");
 
-        // User choice for which type of alcohol they want to add, changes the layout accordingly
-        ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.getItems().addAll("Alcohol", "Wine", "Beer");
-        comboBox.setPromptText("Alcohol view");
-        comboBox.setOnAction(e -> {
-            switch(comboBox.getValue()) {
-                case "Alcohol" :
-                    Scene scene = new Scene(generateAlcoholLayout(window), WIDTH, HEIGHT);
-                    scene.getStylesheets().add(STYLE_SHEET);
-                    window.setScene(scene);
-                    break;
-                case "Wine" :
-                    scene = new Scene(generateWineLayout(window), WIDTH, HEIGHT + 200);
-                    scene.getStylesheets().add(STYLE_SHEET);
-                    window.setScene(scene);
-                    break;
-                case "Beer" :
-                    scene = new Scene(generateBeerLayout(window), WIDTH, HEIGHT + 200);
-                    scene.getStylesheets().add(STYLE_SHEET);
-                    window.setScene(scene);
-                    break;
-            }
-        });
-        GridPane.setConstraints(comboBox, 2, 5);
 
         GridPane layout = new GridPane();
         layout.setPadding(new Insets(10,10,10,10));
@@ -179,19 +137,14 @@ public class AddNewBox {
         layout.setHgap(8);
         layout.getChildren().addAll(nameLabel, abvLabel, countryLabel);
         layout.getChildren().addAll(nameField, abvField, countryField);
-        layout.getChildren().addAll(modAlcohol, comboBox);
+        layout.getChildren().addAll(modAlcohol);
 
         return layout;
     }
 
-    /**
-     * Generates a GridPane layout which takes input from user to create a Wine object
-     * @param window = stage for the layout
-     * @return the layout in a GridPane
-     */
-    private static GridPane generateWineLayout(Stage window) {
+    private static GridPane generateWineLayout(Stage window, Wine wine) {
         // Basic layout
-        GridPane layout = generateAlcoholLayout(window);
+        GridPane layout = generateAlcoholLayout(window, wine);
 
         // Wine specific labels
         Text colourLabel = new Text("Colour: ");
@@ -201,7 +154,7 @@ public class AddNewBox {
 
         // Wine specific fields, ComboBox for WineColours choices
         ComboBox<String> colourField = new ComboBox<>();
-        colourField.setPromptText("Wine colour");
+        colourField.setValue(wine.getColour().name());
         int i = 0;
         String[] colours = new String[WineColour.values().length];
         for (WineColour wineColour : WineColour.values()) {
@@ -212,12 +165,16 @@ public class AddNewBox {
         GridPane.setConstraints(colourField, 1,3);
 
         TextField varietyField = new TextField();
-        varietyField.setPromptText("Grape variety");
+        if (wine.getVariety().equals("")) {
+            varietyField.setPromptText("Grape variety");
+        } else {
+            varietyField.setText(wine.getVariety());
+        }
         GridPane.setConstraints(varietyField, 1,4);
 
-        // Update addAlcohol button to create a Wine object
+        // Update modAlcohol button to update Wine object
         layout.getChildren().remove(modAlcohol);
-        modAlcohol = new Button("Add");
+        modAlcohol = new Button("Modify");
         GridPane.setConstraints(modAlcohol, 1, 5);
         modAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -228,15 +185,13 @@ public class AddNewBox {
                     String country = countryField.getText();
                     String colourName = colourField.getValue().toUpperCase();
                     WineColour colour = WineColour.valueOf(colourName);
+                    String variety = varietyField.getText();
 
-                    if (!varietyField.getText().isEmpty()) {
-                        String variety = varietyField.getText();
-                        alcohol = new Wine(name, abv, country, colour, variety);
-                    } else if (colour != WineColour.NULL) {
-                        alcohol = new Wine(name, abv, country, colour);
-                    } else {
-                        alcohol = new Wine(name, abv, country);
-                    }
+                    wine.setName(name);
+                    wine.setABV(abv);
+                    wine.setCountry(country);
+                    wine.setColour(colour);
+                    wine.setVariety(variety);
 
                     window.close();
                 } catch (NumberFormatException e) {
@@ -255,14 +210,9 @@ public class AddNewBox {
         return layout;
     }
 
-    /**
-     * Generates a GridPane layout which takes input from user to create a Beer object
-     * @param window = stage for the layout
-     * @return the layout in a GridPane
-     */
-    private static GridPane generateBeerLayout(Stage window) {
+    private static GridPane generateBeerLayout(Stage window, Beer beer) {
         // Basic layout
-        GridPane layout = generateAlcoholLayout(window);
+        GridPane layout = generateAlcoholLayout(window, beer);
 
         // Beer specific labels
         Text colourLabel = new Text("Colour: ");
@@ -272,7 +222,7 @@ public class AddNewBox {
 
         // Beer specific fields, ComboBox for BeerColour choices
         ComboBox<String> colourField = new ComboBox<>();
-        colourField.setPromptText("Beer colour");
+        colourField.setValue(beer.getColour().name());
         int i = 0;
         String[] colours = new String[BeerColour.values().length];
         for (BeerColour beerColour : BeerColour.values()) {
@@ -283,12 +233,12 @@ public class AddNewBox {
         GridPane.setConstraints(colourField, 1,3);
 
         TextField ibuField = new TextField();
-        ibuField.setPromptText("International Bitterness Unit");
+        ibuField.setText("" + beer.getIBU());
         GridPane.setConstraints(ibuField, 1,4);
 
         // Updates addAlcohol button to create a Beer object
         layout.getChildren().remove(modAlcohol);
-        modAlcohol = new Button("Add");
+        modAlcohol = new Button("Modify");
         GridPane.setConstraints(modAlcohol, 1, 5);
         modAlcohol.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -300,13 +250,13 @@ public class AddNewBox {
                     String colourName = colourField.getValue().toUpperCase();
                     BeerColour colour = BeerColour.valueOf(colourName);
 
+                    beer.setName(name);
+                    beer.setABV(abv);
+                    beer.setCountry(country);
+                    beer.setColour(colour);
                     if (!ibuField.getText().isEmpty()) {
                         int ibu = Integer.parseInt(ibuField.getText());
-                        alcohol = new Beer(name, abv, country, colour, ibu);
-                    } else if (colour != BeerColour.NULL) {
-                        alcohol = new Beer(name, abv, country, colour);
-                    } else {
-                        alcohol = new Beer(name, abv, country);
+                        beer.setIBU(ibu);
                     }
 
                     window.close();

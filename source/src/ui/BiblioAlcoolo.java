@@ -10,8 +10,8 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -47,7 +47,6 @@ public class BiblioAlcoolo extends Application {
 
         welcomePage = generateWelcomePage();
         window.setScene(welcomePage);
-        //window.setResizable(false);
         window.show();
     }
 
@@ -89,15 +88,15 @@ public class BiblioAlcoolo extends Application {
     private Scene generateLibrariesPage() {
         BorderPane layout = new BorderPane();
 
-        VBox librariesName = new VBox();
+        GridPane librariesName = new GridPane();
         librariesName.setPadding(new Insets(10));
-        librariesName.setSpacing(8);
 
         Label label = new Label("Your Libraries");
         label.setId("bold-label");
         layout.setTop(label);
         BorderPane.setAlignment(label, Pos.CENTER);
 
+        int i = 0;
         for (Library library : user) {
             Button button = new Button(library.getName());
             button.setOnAction(e -> {
@@ -105,6 +104,8 @@ public class BiblioAlcoolo extends Application {
                 window.setScene(libraryHomePage);
             });
             librariesName.getChildren().add(button);
+            GridPane.setConstraints(button, 0, i);
+            i++;
         }
         layout.setLeft(librariesName);
 
@@ -117,13 +118,16 @@ public class BiblioAlcoolo extends Application {
         });
         addNewLibrary.setId("add-button");
         librariesName.getChildren().add(addNewLibrary);
+        GridPane.setConstraints(addNewLibrary, 0, i+1);
 
         Button modify = new Button("Modify");
         modify.setOnAction(e -> {
-            System.out.println("entered modify view");
+            GridPane modifyView = generateLibrariesModifyView(librariesName, modify);
+            layout.setLeft(modifyView);
+            window.setScene(librariesPage);
         });
-        modify.setId("add-button");
         librariesName.getChildren().add(modify);
+        GridPane.setConstraints(modify, 1, i+1);
 
         Button back = new Button("back");
         back.setOnAction(e -> window.setScene(welcomePage));
@@ -156,10 +160,10 @@ public class BiblioAlcoolo extends Application {
         layout.setCenter(alcoholInfo);
 
         // VBox for alcohol names and add button
-        VBox alcoholNames = new VBox();
+        GridPane alcoholNames = new GridPane();
         alcoholNames.setPadding(new Insets(10));
-        alcoholNames.setSpacing(8);
 
+        int i = 0;
         for (Alcohol alcohol : library) {
             Button button = new Button(alcohol.getName());
             button.setOnAction(e -> {
@@ -167,6 +171,8 @@ public class BiblioAlcoolo extends Application {
                 info.getChildren().addAll(getAlcoholInfo(alcohol));
             });
             alcoholNames.getChildren().addAll(button);
+            GridPane.setConstraints(button, 0, i);
+            i++;
         }
 
         Button addNewAlcohol = new Button("Add new alcohol");
@@ -178,14 +184,17 @@ public class BiblioAlcoolo extends Application {
         });
         addNewAlcohol.setId("add-button");
         alcoholNames.getChildren().add(addNewAlcohol);
-        layout.setLeft(alcoholNames);
+        GridPane.setConstraints(addNewAlcohol, 0, i+1);
 
         Button modify = new Button("Modify");
         modify.setOnAction(e -> {
-            System.out.println("entered modify view");
+            GridPane modifyView = generateLibraryHomeModifyView(alcoholNames, modify, library);
+            layout.setLeft(modifyView);
+            window.setScene(libraryHomePage);
         });
-        modify.setId("add-button");
         alcoholNames.getChildren().add(modify);
+        GridPane.setConstraints(modify, 1, i+1);
+        layout.setLeft(alcoholNames);
 
         Button back = new Button("back");
         back.setOnAction(e -> {
@@ -220,8 +229,8 @@ public class BiblioAlcoolo extends Application {
                 Label colour = new Label("Colour:        " + wine.getColour().name().toLowerCase());
                 labels.add(colour);
             }
-            if (wine.getVariety() != "") {
-                Label variety = new Label("Variety:          " + wine.getVariety());
+            if (!wine.getVariety().equals("")) {
+                Label variety = new Label("Variety:        " + wine.getVariety());
                 labels.add(variety);
             }
         } else if (alcohol.getClass() == Beer.class) {
@@ -236,6 +245,85 @@ public class BiblioAlcoolo extends Application {
           }
         }
         return labels;
+    }
+
+    private GridPane generateLibrariesModifyView(GridPane grid, Button modify) {
+        GridPane newView = grid;
+
+        int i = 0;
+        for (Library library : user) {
+            // remove old
+            newView.getChildren().remove(0, i);
+            // create new
+            Button button = new Button(library.getName());
+            button.setOnAction(event -> {
+                ModifyBox.modifyLibrary(library);
+                libraryHomePage = generateLibraryHomePage(library);
+                window.setScene(libraryHomePage);
+            });
+            newView.getChildren().add(button);
+            GridPane.setConstraints(button, 0, i);
+            // create delete buttons
+            Button delete = new Button("X");
+            delete.setOnAction(actionEvent -> {
+                user.removeLibrary(library);
+                librariesPage = generateLibrariesPage();
+                window.setScene(librariesPage);
+            });
+            newView.getChildren().add(delete);
+            GridPane.setConstraints(delete, 1, i);
+            i++;
+        }
+        // change modify button
+        newView.getChildren().remove(modify);
+        Button normal = new Button("back");
+        normal.setOnAction(action -> {
+            librariesPage = generateLibrariesPage();
+            window.setScene(librariesPage);
+        });
+        newView.getChildren().add(normal);
+        GridPane.setConstraints(normal, 1, i+1);
+
+        return newView;
+    }
+
+    private GridPane generateLibraryHomeModifyView(GridPane grid, Button modify, Library library) {
+        GridPane newView = grid;
+
+        int i = 0;
+        for (Alcohol alcohol : library) {
+            // remove old
+            newView.getChildren().remove(0, i);
+            // create new
+            Button button = new Button(alcohol.getName());
+            button.setOnAction(event -> {
+                ModifyBox.modifyAlcohol(alcohol);
+                libraryHomePage = generateLibraryHomePage(library);
+                window.setScene(libraryHomePage);
+            });
+            newView.getChildren().add(button);
+            GridPane.setConstraints(button, 0, i);
+            // create delete buttons
+            Button delete = new Button("X");
+            delete.setOnAction(actionEvent -> {
+                library.removeAlcohol(alcohol);
+                libraryHomePage = generateLibraryHomePage(library);
+                window.setScene(libraryHomePage);
+            });
+            newView.getChildren().add(delete);
+            GridPane.setConstraints(delete, 1, i);
+            i++;
+        }
+        // change modify button
+        newView.getChildren().remove(modify);
+        Button normal = new Button("back");
+        normal.setOnAction(action -> {
+            libraryHomePage = generateLibraryHomePage(library);
+            window.setScene(libraryHomePage);
+        });
+        newView.getChildren().add(normal);
+        GridPane.setConstraints(normal, 1, i+1);
+        return newView;
     }
 
     private void closeProgram() {

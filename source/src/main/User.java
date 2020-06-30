@@ -30,6 +30,10 @@ public class User implements Iterable<Library> {
         aLibraries.put(library.getName(), library);
     }
 
+    public void removeLibrary(Library library) {
+        aLibraries.remove(library.getName());
+    }
+
     public Library getLibrary(String name) {
         return aLibraries.get(name);
     }

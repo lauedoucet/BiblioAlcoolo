@@ -11,6 +11,7 @@ package main;
 import java.io.Serializable;
 
 public class Alcohol implements Serializable {
+
     private String aName;
     private int aRating;
     private double aABV;
@@ -47,6 +48,10 @@ public class Alcohol implements Serializable {
     public void setRating (int pRating) {
         assert pRating > 0 && pRating < 6;
         aRating = pRating;
+    }
+
+    public void setName(String aName) {
+        this.aName = aName;
     }
 
     /**
