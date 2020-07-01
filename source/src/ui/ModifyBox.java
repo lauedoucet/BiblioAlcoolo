@@ -9,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.*;
@@ -37,6 +36,7 @@ public class ModifyBox extends AddNewBox {
      */
     public static GridPane generateLibraryLayout(Stage window, Library library) {
         Label nameLabel = new Label("Name: ");
+        nameLabel.setId("mandatory-label");
         GridPane.setConstraints(nameLabel, 0,0);
 
         TextField nameField = new TextField();
@@ -71,13 +71,13 @@ public class ModifyBox extends AddNewBox {
 
         if (alcohol.getClass() == Wine.class) {
             Wine wine = (Wine) alcohol;
-            Scene scene = new Scene(generateWineLayout(window, wine), getWIDTH() + 50, getHEIGHT() + 50);
+            Scene scene = new Scene(generateWineLayout(window, wine), getWIDTH(), getHEIGHT() + 50);
             scene.getStylesheets().add(getStyleSheet());
             window.setScene(scene);
             window.showAndWait();
         } else if (alcohol.getClass() == Beer.class) {
             Beer beer = (Beer) alcohol;
-            Scene scene = new Scene(generateBeerLayout(window, beer), getWIDTH() + 50, getHEIGHT() + 50);
+            Scene scene = new Scene(generateBeerLayout(window, beer), getWIDTH(), getHEIGHT() + 50);
             scene.getStylesheets().add(getStyleSheet());
             window.setScene(scene);
             window.showAndWait();
@@ -92,10 +92,13 @@ public class ModifyBox extends AddNewBox {
     private static GridPane generateAlcoholLayout(Stage window, Alcohol alcohol) {
         // Basic labels
         Label nameLabel = new Label("Name: ");
+        nameLabel.setId("mandatory-label");
         GridPane.setConstraints(nameLabel, 0,0);
         Label abvLabel = new Label("ABV: ");
+        abvLabel.setId("mandatory-label");
         GridPane.setConstraints(abvLabel, 0,1);
         Label countryLabel = new Label("Country: ");
+        countryLabel.setId("mandatory-label");
         GridPane.setConstraints(countryLabel, 0, 2);
 
         // Basic fields
@@ -147,9 +150,10 @@ public class ModifyBox extends AddNewBox {
         GridPane layout = generateAlcoholLayout(window, wine);
 
         // Wine specific labels
-        Text colourLabel = new Text("Colour: ");
+        Label colourLabel = new Label("Colour: ");
+        colourLabel.setId("mandatory-label");
         GridPane.setConstraints(colourLabel, 0,3);
-        Text varietyLabel = new Text("Variety*: ");
+        Label varietyLabel = new Label("Variety: ");
         GridPane.setConstraints(varietyLabel, 0,4);
 
         // Wine specific fields, ComboBox for WineColours choices
@@ -213,11 +217,13 @@ public class ModifyBox extends AddNewBox {
     private static GridPane generateBeerLayout(Stage window, Beer beer) {
         // Basic layout
         GridPane layout = generateAlcoholLayout(window, beer);
+        layout.getChildren().remove(1,0);
 
         // Beer specific labels
-        Text colourLabel = new Text("Colour: ");
+        Label colourLabel = new Label("Colour: ");
+        colourLabel.setId("mandatory-label");
         GridPane.setConstraints(colourLabel, 0,3);
-        Text ibuLabel = new Text("IBU*: ");
+        Label ibuLabel = new Label("IBU*: ");
         GridPane.setConstraints(ibuLabel, 0,4);
 
         // Beer specific fields, ComboBox for BeerColour choices

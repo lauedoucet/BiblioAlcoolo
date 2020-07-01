@@ -17,6 +17,11 @@
     -fx-font-size:          14pt;
 }
 
+#mandatory-label {
+    -fx-text-fill:          #800000;
+    -fx-font-weight:        bold;
+}
+
 .button {
     -fx-background-color:   #FFFFFF;
     -fx-text-fill:          #800000;

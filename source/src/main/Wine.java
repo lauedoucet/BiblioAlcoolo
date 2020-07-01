@@ -8,6 +8,8 @@
 
 package main;
 
+import java.util.*;
+
 public class Wine extends Alcohol {
     private WineColour aColour;
     private String aVariety;
@@ -55,5 +57,22 @@ public class Wine extends Alcohol {
         if (aVariety != null) {
             System.out.println("Variety:    " + aVariety);
         }
+    }
+
+    public static LinkedHashMap<String, Wine> sortByColour(LinkedHashMap<String, Wine> wines) {
+        Set<Map.Entry<String, Wine>> entries = wines.entrySet();
+        List<Map.Entry<String, Wine>> entriesList = new ArrayList<>(entries);
+        Collections.sort(entriesList, new Comparator<Map.Entry<String, Wine>>() {
+            @Override
+            public int compare(Map.Entry<String, Wine> entry1, Map.Entry<String, Wine> entry2) {
+                return entry1.getValue().getColour().compareTo(entry2.getValue().getColour());
+            }
+        });
+        LinkedHashMap<String, Wine> sortedBottles = new LinkedHashMap<>();
+        for (Map.Entry<String, Wine> entry : entriesList) {
+            sortedBottles.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedBottles;
     }
 }

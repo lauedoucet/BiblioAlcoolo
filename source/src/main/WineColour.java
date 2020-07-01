@@ -1,5 +1,5 @@
 package main;
 
 public enum WineColour {
-    RED, WHITE, ROSÉ, GRAY, ORANGE, PORT, SPARKLING, NULL;
+    NULL, GRAY, ORANGE, PORT, RED, ROSÉ, SPARKLING, WHITE;
 }

@@ -77,6 +77,7 @@ public class AddNewBox {
 
     public static GridPane generateLibraryLayout(Stage window) {
         nameLabel = new Label("Name: ");
+        nameLabel.setId("mandatory-label");
         GridPane.setConstraints(nameLabel, 0,0);
 
         nameField = new TextField();
@@ -112,10 +113,13 @@ public class AddNewBox {
     private static GridPane generateAlcoholLayout(Stage window) {
         // Basic labels
         nameLabel = new Label("Name: ");
+        nameLabel.setId("mandatory-label");
         GridPane.setConstraints(nameLabel, 0,0);
         abvLabel = new Label("ABV: ");
+        abvLabel.setId("mandatory-label");
         GridPane.setConstraints(abvLabel, 0,1);
         countryLabel = new Label("Country: ");
+        countryLabel.setId("mandatory-label");
         GridPane.setConstraints(countryLabel, 0, 2);
 
         // Basic fields
@@ -151,7 +155,7 @@ public class AddNewBox {
         // User choice for which type of alcohol they want to add, changes the layout accordingly
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.getItems().addAll("Alcohol", "Wine", "Beer");
-        comboBox.setPromptText("Alcohol view");
+        comboBox.setPromptText("Alcohol type");
         comboBox.setOnAction(e -> {
             switch(comboBox.getValue()) {
                 case "Alcohol" :
@@ -160,12 +164,12 @@ public class AddNewBox {
                     window.setScene(scene);
                     break;
                 case "Wine" :
-                    scene = new Scene(generateWineLayout(window), WIDTH, HEIGHT + 200);
+                    scene = new Scene(generateWineLayout(window), WIDTH, HEIGHT + 50);
                     scene.getStylesheets().add(STYLE_SHEET);
                     window.setScene(scene);
                     break;
                 case "Beer" :
-                    scene = new Scene(generateBeerLayout(window), WIDTH, HEIGHT + 200);
+                    scene = new Scene(generateBeerLayout(window), WIDTH, HEIGHT + 50);
                     scene.getStylesheets().add(STYLE_SHEET);
                     window.setScene(scene);
                     break;
@@ -194,9 +198,11 @@ public class AddNewBox {
         GridPane layout = generateAlcoholLayout(window);
 
         // Wine specific labels
-        Text colourLabel = new Text("Colour: ");
+        Label colourLabel = new Label("Colour: ");
+        colourLabel.setId("mandatory-label");
         GridPane.setConstraints(colourLabel, 0,3);
-        Text varietyLabel = new Text("Variety*: ");
+        Label varietyLabel = new Label("Variety: ");
+
         GridPane.setConstraints(varietyLabel, 0,4);
 
         // Wine specific fields, ComboBox for WineColours choices
@@ -265,9 +271,10 @@ public class AddNewBox {
         GridPane layout = generateAlcoholLayout(window);
 
         // Beer specific labels
-        Text colourLabel = new Text("Colour: ");
+        Label colourLabel = new Label("Colour: ");
+        colourLabel.setId("mandatory-label");
         GridPane.setConstraints(colourLabel, 0,3);
-        Text ibuLabel = new Text("IBU*: ");
+        Label ibuLabel = new Label("IBU: ");
         GridPane.setConstraints(ibuLabel, 0,4);
 
         // Beer specific fields, ComboBox for BeerColour choices
