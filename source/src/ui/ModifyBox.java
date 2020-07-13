@@ -217,13 +217,12 @@ public class ModifyBox extends AddNewBox {
     private static GridPane generateBeerLayout(Stage window, Beer beer) {
         // Basic layout
         GridPane layout = generateAlcoholLayout(window, beer);
-        layout.getChildren().remove(1,0);
 
         // Beer specific labels
         Label colourLabel = new Label("Colour: ");
         colourLabel.setId("mandatory-label");
         GridPane.setConstraints(colourLabel, 0,3);
-        Label ibuLabel = new Label("IBU*: ");
+        Label ibuLabel = new Label("IBU: ");
         GridPane.setConstraints(ibuLabel, 0,4);
 
         // Beer specific fields, ComboBox for BeerColour choices
