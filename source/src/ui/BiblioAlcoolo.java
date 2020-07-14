@@ -7,9 +7,10 @@
  */
 package ui;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,7 +20,6 @@ import javafx.stage.Stage;
 import javafx.scene.control.*;
 import main.*;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 
@@ -31,24 +31,34 @@ public class BiblioAlcoolo extends Application {
     private static final String VERSION = "1.0";
     private static final String STYLE_SHEET = "ui/biblioStyle.css";
 
-    private Stage window;
-    private Scene welcomePage, librariesPage, libraryHomePage;
+    private static Stage window;
+    private static Scene welcomePage, librariesPage, libraryHomePage;
 
-    private User user = new User();
+    private static User user = new User();
+
+    public static void setWindowScene(Scene scene) {
+        window.setScene(scene);
+    }
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    public static User getUser() {
+        return user;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-       user.loadFile();
+        /**
+         * loading FXML file
+         */
+        Parent root = FXMLLoader.load(getClass().getResource("welcomepage.fxml"));
+        user.loadFile();
 
         window = primaryStage;
         window.setTitle(TITLE + " " + VERSION);
-
-        welcomePage = generateWelcomePage();
-        window.setScene(welcomePage);
+        window.setScene(new Scene(root, WIDTH, HEIGHT));
         window.show();
     }
 
